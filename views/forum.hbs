@@ -1,0 +1,114 @@
+<style>
+.cat-block{margin-bottom:14px;border:1px solid var(--border);border-radius:4px;overflow:hidden;}
+.cat-section-head{background:linear-gradient(90deg,#2c3e50,#3d5166);color:#fff;padding:8px 12px;font-family:'Oswald',sans-serif;font-size:14px;font-weight:600;display:flex;align-items:center;gap:8px;}
+.cat-row{display:grid;grid-template-columns:40px 1fr 70px 70px 160px;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid #f0f0f0;transition:background .15s;}
+.cat-row:last-child{border-bottom:none;}
+.cat-row:hover{background:#fafafa;}
+.cat-ico{width:36px;height:36px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:18px;}
+.cat-name{font-weight:700;font-size:14px;color:#111;}
+.cat-name:hover{color:var(--red);}
+.cat-desc{font-size:11px;color:#888;margin-top:2px;}
+.cat-num{text-align:center;font-size:14px;font-weight:800;color:#333;font-family:'Oswald',sans-serif;}
+.cat-num-lbl{font-size:10px;color:#999;display:block;}
+.cat-last{font-size:11px;color:#888;text-align:right;}
+.cat-last a{color:var(--red);font-weight:600;}
+.filter-bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:10px 12px;background:#f8f8f8;border:1px solid var(--border);border-radius:4px;margin-bottom:12px;}
+.f-btn{padding:5px 12px;border-radius:3px;border:1px solid #ddd;font-size:12px;font-weight:600;cursor:pointer;background:#fff;color:#555;transition:all .15s;}
+.f-btn.active,.f-btn:hover{background:var(--red);color:#fff;border-color:var(--red);}
+</style>
+
+<div class="breadcrumb"><a href="/home">Trang chủ</a><span class="sep">›</span><span>Diễn đàn</span></div>
+
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+  <h2 style="font-family:'Oswald',sans-serif;font-size:20px;color:var(--red);">📋 DANH MỤC DIỄN ĐÀN</h2>
+  <a href="/post/1" class="btn btn-gold btn-sm">+ Bài viết mới</a>
+</div>
+
+<div class="filter-bar">
+  <span style="font-size:12px;color:#888;font-weight:600;">Lọc:</span>
+  <button class="f-btn active" onclick="setFilter(this)">Tất cả</button>
+  <button class="f-btn" onclick="setFilter(this)">Mới nhất</button>
+  <button class="f-btn" onclick="setFilter(this)">Hot nhất</button>
+  <button class="f-btn" onclick="setFilter(this)">Miền Bắc</button>
+  <button class="f-btn" onclick="setFilter(this)">Miền Nam</button>
+  <button class="f-btn" onclick="setFilter(this)">Miền Trung</button>
+</div>
+
+<div class="cat-block fade-up">
+  <div class="cat-section-head">🎯 THẢO LUẬN CHUNG</div>
+  <div class="cat-row">
+    <div class="cat-ico" style="background:#fdecea">🔥</div>
+    <div><a href="#" class="cat-name">Thảo Luận Tổng Hợp</a><div class="cat-desc">Thảo luận mọi chủ đề về xổ số, kinh nghiệm, phương pháp</div></div>
+    <div><div class="cat-num">3,841<span class="cat-num-lbl">Bài viết</span></div></div>
+    <div><div class="cat-num">18.2K<span class="cat-num-lbl">Trả lời</span></div></div>
+    <div class="cat-last">Lúc 13:01<br><a href="/profile/MAIDEN86">MAIDEN86</a></div>
+  </div>
+  <div class="cat-row">
+    <div class="cat-ico" style="background:#fff9e6">📢</div>
+    <div><a href="#" class="cat-name">Thông Báo & Sự Kiện</a><div class="cat-desc">Thông báo từ Admin, sự kiện đặc biệt của diễn đàn</div></div>
+    <div><div class="cat-num">142<span class="cat-num-lbl">Bài viết</span></div></div>
+    <div><div class="cat-num">892<span class="cat-num-lbl">Trả lời</span></div></div>
+    <div class="cat-last">30 phút trước<br><a href="/profile/ADMIN" style="color:var(--red)">ADMIN ✓</a></div>
+  </div>
+</div>
+
+<div class="cat-block fade-up">
+  <div class="cat-section-head">🏆 CAO THỦ & CHỐT SỐ</div>
+  <div class="cat-row">
+    <div class="cat-ico" style="background:#e8f5e9">🥇</div>
+    <div><a href="#" class="cat-name">Huyền Thoại Chốt Số</a><div class="cat-desc">Bài viết từ các cao thủ được xếp hạng Huyền Thoại</div></div>
+    <div><div class="cat-num">1,205<span class="cat-num-lbl">Bài viết</span></div></div>
+    <div><div class="cat-num">9,341<span class="cat-num-lbl">Trả lời</span></div></div>
+    <div class="cat-last">45 phút trước<br><a href="/profile/VHPRO85">VHPRO85</a></div>
+  </div>
+  <div class="cat-row">
+    <div class="cat-ico" style="background:#e3f2fd">🥈</div>
+    <div><a href="#" class="cat-name">Bản Tin Cao Thủ</a><div class="cat-desc">Thành viên VIP chia sẻ nhận định & dự đoán hàng ngày</div></div>
+    <div><div class="cat-num">2,087<span class="cat-num-lbl">Bài viết</span></div></div>
+    <div><div class="cat-num">14.7K<span class="cat-num-lbl">Trả lời</span></div></div>
+    <div class="cat-last">1 giờ trước<br><a href="/profile/sosegiau68">sosegiau68</a></div>
+  </div>
+  <div class="cat-row">
+    <div class="cat-ico" style="background:#fce4ec">🥉</div>
+    <div><a href="#" class="cat-name">Thành Viên Chốt Số</a><div class="cat-desc">Nơi thành viên đăng chốt số theo ngày thi đấu</div></div>
+    <div><div class="cat-num">4,512<span class="cat-num-lbl">Bài viết</span></div></div>
+    <div><div class="cat-num">21.3K<span class="cat-num-lbl">Trả lời</span></div></div>
+    <div class="cat-last">Lúc 12:44<br><a href="/profile/BEOHP88">BEOHP88</a></div>
+  </div>
+</div>
+
+<div class="cat-block fade-up">
+  <div class="cat-section-head">🎰 MIỀN BẮC</div>
+  <div class="cat-row">
+    <div class="cat-ico" style="background:#fff3e0">🎯</div>
+    <div><a href="#" class="cat-name">Cầu Lô MB — Bạch Thủ Lô</a><div class="cat-desc">Dự đoán cầu lô, bạch thủ lô miền Bắc hàng ngày</div></div>
+    <div><div class="cat-num">6,124<span class="cat-num-lbl">Bài viết</span></div></div>
+    <div><div class="cat-num">38.9K<span class="cat-num-lbl">Trả lời</span></div></div>
+    <div class="cat-last">Lúc 12:01<br><a href="/profile/ADMIN" style="color:var(--red)">ADMIN ✓</a></div>
+  </div>
+  <div class="cat-row">
+    <div class="cat-ico" style="background:#ede7f6">🔢</div>
+    <div><a href="#" class="cat-name">Đề 36 Số — Khung 3 Ngày</a><div class="cat-desc">Dàn đề 36 số nuôi khung 3 ngày miền Bắc</div></div>
+    <div><div class="cat-num">1,438<span class="cat-num-lbl">Bài viết</span></div></div>
+    <div><div class="cat-num">7,823<span class="cat-num-lbl">Trả lời</span></div></div>
+    <div class="cat-last">Lúc 11:30<br><a href="/profile/thantai779">thantai779</a></div>
+  </div>
+</div>
+
+<div class="cat-block fade-up">
+  <div class="cat-section-head">🎪 MIỀN NAM & MIỀN TRUNG</div>
+  <div class="cat-row">
+    <div class="cat-ico" style="background:#e0f7fa">🌴</div>
+    <div><a href="#" class="cat-name">Cầu Lô K2N — Miền Nam</a><div class="cat-desc">Bắt chốt bạch thủ lô khung 2N miền Nam, Trung</div></div>
+    <div><div class="cat-num">3,217<span class="cat-num-lbl">Bài viết</span></div></div>
+    <div><div class="cat-num">16.1K<span class="cat-num-lbl">Trả lời</span></div></div>
+    <div class="cat-last">Lúc 11:20<br><a href="/profile/OTTHOC77">OTTHOC77</a></div>
+  </div>
+</div>
+
+<script>
+function setFilter(btn) {
+  document.querySelectorAll('.f-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+</script>

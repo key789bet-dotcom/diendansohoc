@@ -1,0 +1,82 @@
+<div class="breadcrumb"><span>🏠 Trang chủ</span></div>
+
+<div class="announce" style="background:#fff9e6;border-bottom:1px solid #f7dc6f;padding:4px 0;margin-bottom:10px;">
+  <div style="max-width:1200px;margin:0 auto;padding:0 14px;">
+    <div style="font-size:13px;color:#c0392b;font-weight:600;padding:2px 0;">🎉 CHƠI VỚI CÒ HỘI LẦN NÀY MỚI 1200K LIÊN TẬY</div>
+    <div style="font-size:13px;color:#c0392b;font-weight:600;padding:2px 0;">❇️ SỐ CHỐT CÙNG MC DIỄN ĐÀN 🔥 — THÔNG BÁO RA MẮT WEB LIVE MC ❇️</div>
+  </div>
+</div>
+
+<!-- FEATURED: VIDEO + BXH SỰ KIỆN -->
+<div class="card fade-up">
+  <div class="card-head">📌 SỰ KIỆN NỔI BẬT <a href="/forum">Xem tất cả »</a></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;">
+    <!-- Video -->
+    <div style="background:#000;position:relative;cursor:pointer;min-height:200px;display:flex;align-items:center;justify-content:center;flex-direction:column;" onclick="window.open('https://youtube.com','_blank')">
+      <div style="width:58px;height:58px;background:rgba(200,0,0,.85);border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:10px;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      </div>
+      <div style="color:#fff;font-size:13px;font-weight:600;padding:0 16px;text-align:center;">Diễn Đàn GMSH — Sự Kiện Tháng 4/2026</div>
+      <div style="color:#888;font-size:11px;margin-top:4px;">Xem trên YouTube</div>
+    </div>
+    <!-- Event table -->
+    <div style="padding:12px;">
+      <div style="font-size:13px;font-weight:700;color:#c0392b;border-left:3px solid #c0392b;padding-left:8px;margin-bottom:8px;line-height:1.5;">🎯 SỰ KIỆN DỰ ĐOÁN THÁNG 4/2026<br>GIẢI THƯỞNG <span style="color:#c0392b;font-size:15px;font-weight:800;">500.000 VNĐ</span></div>
+      <div style="background:#f39c12;color:#fff;text-align:center;padding:5px;font-weight:700;font-size:12px;border-radius:3px 3px 0 0;">🏆 ĐỆ NHẤT CAO THỦ — T4/2026</div>
+      <table style="width:100%;border-collapse:collapse;font-size:12px;">
+        <thead><tr style="background:#fff9e6;"><th style="padding:5px 8px;font-weight:700;color:#555;border:1px solid #eee;">STT</th><th style="padding:5px 8px;font-weight:700;color:#555;border:1px solid #eee;text-align:left;">Cao Thủ</th><th style="padding:5px 8px;font-weight:700;color:#555;border:1px solid #eee;">Điểm</th></tr></thead>
+        <tbody>
+          {{#each bxh}}
+          <tr><td style="padding:5px 8px;border:1px solid #eee;text-align:center;font-weight:800;color:#c0392b;">{{rank}}</td><td style="padding:5px 8px;border:1px solid #eee;"><a href="/profile/{{name}}" style="color:#2980b9;font-weight:600;">{{name}}</a></td><td style="padding:5px 8px;border:1px solid #eee;text-align:center;font-weight:700;color:#c0392b;">{{diem}}</td></tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- FORUM TABLE -->
+<div class="card fade-up">
+  <div class="card-head">📝 BÀI VIẾT MỚI NHẤT <a href="/forum">Tất cả »</a></div>
+  <div style="padding:8px 10px;border-bottom:1px solid #eee;">
+    <input type="text" style="width:100%;padding:7px 12px;border:1px solid #ddd;border-radius:4px;font-size:13px;outline:none;" placeholder="🔍 Tìm bài viết, cao thủ..." oninput="filterPosts(this.value)">
+  </div>
+  <table class="ftable" id="postTable">
+    <thead>
+      <tr><th style="width:48%">Chủ đề</th><th>Tạo bởi</th><th>Likes</th><th>Views</th><th>Trả lời</th><th>Bài cuối</th></tr>
+    </thead>
+    <tbody>
+      {{#each baiViet}}
+      <tr>
+        <td>
+          <span class="tag tag-{{tag}}">{{tagLabel}}</span>
+          <a href="/post/{{id}}" class="post-title-link">{{title}}</a>
+        </td>
+        <td class="tc"><a href="/profile/{{author}}" class="author-a {{#if (eq author 'ADMIN')}}adm{{/if}}">{{author}}</a></td>
+        <td class="tc"><span class="num">{{likes}}</span>👍</td>
+        <td class="tc"><span class="num">{{views}}</span></td>
+        <td class="tc"><span class="num">{{replies}}</span></td>
+        <td class="tc" style="font-size:11px;white-space:nowrap;">{{time}}</td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+  <div class="pagi">
+    <a class="cur" href="/home">1</a>
+    <a href="/home?page=2">2</a>
+    <a href="/home?page=3">3</a>
+    <a href="/home?page=4">4</a>
+    <span style="padding:4px 6px;color:#aaa">...</span>
+    <a href="/home?page=20">20</a>
+    <a href="/home?page=2">Sau »</a>
+  </div>
+</div>
+
+<script>
+function filterPosts(q) {
+  const rows = document.querySelectorAll('#postTable tbody tr');
+  rows.forEach(r => {
+    r.style.display = r.textContent.toLowerCase().includes(q.toLowerCase()) ? '' : 'none';
+  });
+}
+</script>

@@ -1,0 +1,38 @@
+<div class="breadcrumb"><a href="/home">Trang chủ</a><span class="sep">›</span><span>Tìm kiếm: "{{q}}"</span></div>
+
+<div class="card fade-up">
+  <div class="card-head">🔍 TÌM KIẾM</div>
+  <div style="padding:12px;">
+    <form action="/search" method="get" style="display:flex;gap:8px;">
+      <input type="text" name="q" value="{{q}}" placeholder="Tìm bài viết, cao thủ, số..." style="flex:1;padding:10px 14px;border:1px solid #ddd;border-radius:4px;font-size:14px;outline:none;">
+      <button type="submit" class="btn btn-red">Tìm kiếm</button>
+    </form>
+  </div>
+</div>
+
+{{#if q}}
+<div class="card fade-up">
+  <div class="card-head">📋 KẾT QUẢ TÌM KIẾM {{#if results}}({{results.length}} bài viết){{/if}}</div>
+  {{#if results}}
+  <table class="ftable">
+    <thead><tr><th>Bài viết</th><th>Tác giả</th><th>Views</th><th>Ngày</th></tr></thead>
+    <tbody>
+      {{#each results}}
+      <tr>
+        <td><span class="tag tag-{{tag}}">{{tagLabel}}</span><a href="/post/{{id}}" class="post-title-link">{{title}}</a></td>
+        <td class="tc"><a href="/profile/{{author}}" class="author-a">{{author}}</a></td>
+        <td class="tc"><span class="num">{{views}}</span></td>
+        <td class="tc" style="font-size:12px;color:#888;">{{time}}</td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+  {{else}}
+  <div style="padding:30px;text-align:center;color:#888;">
+    <div style="font-size:40px;margin-bottom:12px;">🔍</div>
+    <div style="font-size:15px;font-weight:600;margin-bottom:6px;">Không tìm thấy kết quả cho "{{q}}"</div>
+    <div style="font-size:13px;">Thử tìm với từ khóa khác hoặc <a href="/forum" style="color:var(--red)">duyệt diễn đàn</a></div>
+  </div>
+  {{/if}}
+</div>
+{{/if}}

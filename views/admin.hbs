@@ -1,0 +1,107 @@
+<div class="admin-layout">
+  <!-- SIDEBAR NAV -->
+  <div class="admin-sidebar">
+    <div class="admin-brand">
+      <div class="icon">GM</div>
+      <div><div class="name">GMSH Admin</div><div class="sub">Quản trị diễn đàn</div></div>
+    </div>
+    <div class="admin-nav-section">TỔNG QUAN</div>
+    <a class="admin-nav-link active" href="/admin"><span class="ico">📊</span> Dashboard</a>
+    <a class="admin-nav-link" href="#"><span class="ico">📈</span> Thống kê</a>
+    <div class="admin-nav-section">NỘI DUNG</div>
+    <a class="admin-nav-link" href="#"><span class="ico">📝</span> Quản lý bài viết</a>
+    <a class="admin-nav-link" href="#"><span class="ico">💬</span> Bình luận</a>
+    <a class="admin-nav-link" href="#"><span class="ico">📋</span> Danh mục</a>
+    <div class="admin-nav-section">THÀNH VIÊN</div>
+    <a class="admin-nav-link" href="#"><span class="ico">👥</span> Thành viên</a>
+    <a class="admin-nav-link" href="#"><span class="ico">🏆</span> BXH Cao thủ</a>
+    <a class="admin-nav-link" href="#"><span class="ico">⚠️</span> Báo cáo</a>
+    <div class="admin-nav-section">HỆ THỐNG</div>
+    <a class="admin-nav-link" href="#"><span class="ico">⚙️</span> Cài đặt</a>
+    <a class="admin-nav-link" href="#"><span class="ico">📢</span> Thông báo</a>
+    <a class="admin-nav-link" href="/home"><span class="ico">🌐</span> Xem website</a>
+  </div>
+
+  <!-- MAIN -->
+  <div class="admin-main">
+    <div class="admin-topbar">
+      <h1>📊 Dashboard</h1>
+      <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:#555;">
+        <span>👤 Admin</span>
+        <span style="color:#ddd">|</span>
+        <a href="/home" style="color:var(--red)">← Về website</a>
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="admin-stats">
+      <div class="admin-stat-card red"><div class="admin-stat-val">48,241</div><div class="admin-stat-lbl">Tổng bài viết</div></div>
+      <div class="admin-stat-card gold"><div class="admin-stat-val">12,847</div><div class="admin-stat-lbl">Thành viên</div></div>
+      <div class="admin-stat-card green"><div class="admin-stat-val">247</div><div class="admin-stat-lbl">Online ngay</div></div>
+      <div class="admin-stat-card blue"><div class="admin-stat-val">3.1M</div><div class="admin-stat-lbl">Tổng lượt xem</div></div>
+    </div>
+
+    <!-- CHARTS -->
+    <div style="display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-bottom:14px;">
+      <div class="admin-card">
+        <h3>📈 Bài viết mới 7 ngày qua</h3>
+        <div style="height:120px;display:flex;align-items:flex-end;gap:8px;padding:8px 0;">
+          {{#each (arr 65 80 55 90 75 88 110)}}
+          <div style="flex:1;background:var(--red);border-radius:3px 3px 0 0;height:{{this}}px;opacity:.85;position:relative;cursor:pointer;" title="{{this}} bài viết">
+            <div style="position:absolute;top:-18px;left:50%;transform:translateX(-50%);font-size:10px;color:#666;white-space:nowrap;">{{this}}</div>
+          </div>
+          {{/each}}
+        </div>
+        <div style="display:flex;justify-content:space-around;font-size:10px;color:#aaa;margin-top:4px;">
+          <span>T2</span><span>T3</span><span>T4</span><span>T5</span><span>T6</span><span>T7</span><span>CN</span>
+        </div>
+      </div>
+      <div class="admin-card">
+        <h3>🌍 Vùng thành viên</h3>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-top:4px;">
+          <div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px;"><span>Miền Bắc</span><span style="font-weight:700;">58%</span></div><div style="height:8px;background:#eee;border-radius:4px;"><div style="width:58%;height:100%;background:var(--red);border-radius:4px;"></div></div></div>
+          <div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px;"><span>Miền Nam</span><span style="font-weight:700;">28%</span></div><div style="height:8px;background:#eee;border-radius:4px;"><div style="width:28%;height:100%;background:var(--green);border-radius:4px;"></div></div></div>
+          <div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px;"><span>Miền Trung</span><span style="font-weight:700;">14%</span></div><div style="height:8px;background:#eee;border-radius:4px;"><div style="width:14%;height:100%;background:var(--blue);border-radius:4px;"></div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RECENT POSTS -->
+    <div class="admin-card">
+      <h3>📝 Bài viết mới nhất</h3>
+      <table class="admin-table">
+        <thead><tr><th>Tiêu đề</th><th>Tác giả</th><th>Trạng thái</th><th>Views</th><th>Ngày</th><th>Hành động</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><a href="/post/1" style="color:var(--blue);font-weight:600;font-size:13px;">CÁI BANG THỐNG NHẤT THIÊN HA 2,3,4D...</a></td>
+            <td>MAIDEN86</td><td><span class="badge-green">✅ Duyệt</span></td><td>84K</td><td style="font-size:12px;color:#888">23/04</td>
+            <td><button style="padding:3px 8px;border:1px solid #ddd;border-radius:3px;font-size:11px;cursor:pointer;margin-right:4px;">Sửa</button><button style="padding:3px 8px;border:1px solid #e74c3c;border-radius:3px;font-size:11px;cursor:pointer;color:#e74c3c;">Xóa</button></td>
+          </tr>
+          <tr>
+            <td><a href="/post/2" style="color:var(--blue);font-weight:600;font-size:13px;">TIÊU DIỆT ĐỒNG NÁT VỚI 2,3,4D...</a></td>
+            <td>VIETHOANG2</td><td><span class="badge-green">✅ Duyệt</span></td><td>39K</td><td style="font-size:12px;color:#888">22/04</td>
+            <td><button style="padding:3px 8px;border:1px solid #ddd;border-radius:3px;font-size:11px;cursor:pointer;margin-right:4px;">Sửa</button><button style="padding:3px 8px;border:1px solid #e74c3c;border-radius:3px;font-size:11px;cursor:pointer;color:#e74c3c;">Xóa</button></td>
+          </tr>
+          <tr>
+            <td style="color:var(--gold);font-weight:600;font-size:13px;">Bài chờ duyệt: "KINH NGHIỆM 10 NĂM..."</td>
+            <td>newmember01</td><td><span class="badge-gold">⏳ Chờ duyệt</span></td><td>12</td><td style="font-size:12px;color:#888">23/04</td>
+            <td><button style="padding:3px 8px;background:var(--green);color:#fff;border:none;border-radius:3px;font-size:11px;cursor:pointer;margin-right:4px;">Duyệt</button><button style="padding:3px 8px;border:1px solid #e74c3c;border-radius:3px;font-size:11px;cursor:pointer;color:#e74c3c;">Từ chối</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- RECENT MEMBERS -->
+    <div class="admin-card">
+      <h3>👥 Thành viên mới đăng ký</h3>
+      <table class="admin-table">
+        <thead><tr><th>Username</th><th>Email</th><th>Vùng</th><th>Trạng thái</th><th>Đăng ký</th></tr></thead>
+        <tbody>
+          <tr><td style="font-weight:600">newmember01</td><td style="font-size:12px;color:#888">new***@gmail.com</td><td>Miền Bắc</td><td><span class="badge-green">✅ Active</span></td><td style="font-size:12px;color:#888">23/04/2026</td></tr>
+          <tr><td style="font-weight:600">caothu_test</td><td style="font-size:12px;color:#888">cao***@gmail.com</td><td>Miền Nam</td><td><span class="badge-gold">⏳ Chờ xác nhận</span></td><td style="font-size:12px;color:#888">22/04/2026</td></tr>
+          <tr><td style="font-weight:600">xosohocsinh</td><td style="font-size:12px;color:#888">xos***@gmail.com</td><td>Miền Trung</td><td><span class="badge-green">✅ Active</span></td><td style="font-size:12px;color:#888">21/04/2026</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

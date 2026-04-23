@@ -1,0 +1,127 @@
+<div class="breadcrumb"><a href="/home">Trang chủ</a><span class="sep">›</span><span>Công cụ xổ số</span></div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+
+  <!-- TẠO DÀN SỐ -->
+  <div class="card fade-up">
+    <div class="card-head">🎲 TẠO DÀN SỐ NGẪU NHIÊN</div>
+    <div style="padding:14px;">
+      <div style="margin-bottom:10px;">
+        <label style="font-size:13px;font-weight:600;color:#444;display:block;margin-bottom:5px;">Số lượng cặp số</label>
+        <select id="danCount" style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:4px;font-size:13px;outline:none;">
+          <option value="5">5 cặp số</option>
+          <option value="10" selected>10 cặp số</option>
+          <option value="18">18 cặp số (Lô đề 36)</option>
+          <option value="27">27 cặp số</option>
+        </select>
+      </div>
+      <div style="margin-bottom:12px;">
+        <label style="font-size:13px;font-weight:600;color:#444;display:block;margin-bottom:5px;">Loại số</label>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <label style="display:flex;align-items:center;gap:4px;font-size:13px;cursor:pointer;"><input type="radio" name="numType" value="lo" checked> Lô (00-99)</label>
+          <label style="display:flex;align-items:center;gap:4px;font-size:13px;cursor:pointer;"><input type="radio" name="numType" value="de"> Đề (00-99)</label>
+          <label style="display:flex;align-items:center;gap:4px;font-size:13px;cursor:pointer;"><input type="radio" name="numType" value="3d"> Ba càng (000-999)</label>
+        </div>
+      </div>
+      <button class="btn btn-red" style="width:100%" onclick="genDan()">🎲 Tạo dàn số</button>
+      <div id="danResult" style="margin-top:12px;display:flex;flex-wrap:wrap;gap:6px;"></div>
+    </div>
+  </div>
+
+  <!-- THỐNG KÊ LÔ GAN -->
+  <div class="card fade-up">
+    <div class="card-head">📊 LÔ GAN MIỀN BẮC</div>
+    <div style="padding:14px;">
+      <p style="font-size:13px;color:#555;margin-bottom:10px;">Các số chưa về trong nhiều kỳ gần nhất:</p>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;" id="ganList"></div>
+      <div style="margin-top:12px;font-size:12px;color:#888;">
+        <span style="background:#fdecea;color:var(--red);padding:2px 8px;border-radius:10px;font-weight:700;margin-right:6px;">Đỏ</span> &gt; 10 ngày &nbsp;
+        <span style="background:#fff9e6;color:var(--gold);padding:2px 8px;border-radius:10px;font-weight:700;margin-right:6px;">Vàng</span> 7–10 ngày &nbsp;
+        <span style="background:#e8f5e9;color:var(--green);padding:2px 8px;border-radius:10px;font-weight:700;">Xanh</span> 5–6 ngày
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+
+  <!-- BẠCH THỦ LÔ -->
+  <div class="card fade-up">
+    <div class="card-head">🎯 GỢI Ý BẠCH THỦ LÔ</div>
+    <div style="padding:14px;">
+      <p style="font-size:13px;color:#555;margin-bottom:12px;">Dựa trên phân tích cầu 7 ngày gần nhất:</p>
+      <div style="text-align:center;padding:12px;background:#fdecea;border-radius:6px;border:2px solid #f5c6c0;margin-bottom:10px;">
+        <div style="font-size:48px;font-weight:900;color:var(--red);font-family:'Oswald',sans-serif;letter-spacing:4px;">28</div>
+        <div style="font-size:12px;color:#888;margin-top:4px;">Bạch thủ hôm nay • Tin cậy 73%</div>
+      </div>
+      <div style="display:flex;gap:8px;justify-content:center;">
+        <div style="text-align:center;padding:8px 16px;background:#e3f2fd;border-radius:4px;border:1px solid #bbdefb;">
+          <div style="font-size:22px;font-weight:800;color:var(--blue);font-family:'Oswald',sans-serif;">73</div>
+          <div style="font-size:10px;color:#888;">Dự phòng</div>
+        </div>
+        <div style="text-align:center;padding:8px 16px;background:#e8f5e9;border-radius:4px;border:1px solid #c8e6c9;">
+          <div style="font-size:22px;font-weight:800;color:var(--green);font-family:'Oswald',sans-serif;">56</div>
+          <div style="font-size:10px;color:#888;">Dự phòng</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KIỂM TRA KẾT QUẢ -->
+  <div class="card fade-up">
+    <div class="card-head">✅ KIỂM TRA SỐ TRÚNG</div>
+    <div style="padding:14px;">
+      <div style="margin-bottom:10px;">
+        <label style="font-size:13px;font-weight:600;color:#444;display:block;margin-bottom:5px;">Nhập số cần kiểm tra</label>
+        <input type="text" id="checkNum" placeholder="VD: 28, 73, 56..." style="width:100%;padding:9px 12px;border:1px solid #ddd;border-radius:4px;font-size:13px;outline:none;" oninput="checkNumber()">
+      </div>
+      <div id="checkResult" style="min-height:60px;"></div>
+      <div style="font-size:12px;color:#aaa;margin-top:8px;">Cách nhau bởi dấu phẩy — KQXS MB 23/04/2026</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// Tạo dàn số
+function genDan() {
+  const n = parseInt(document.getElementById('danCount').value);
+  const type = document.querySelector('input[name="numType"]:checked').value;
+  const nums = new Set();
+  while (nums.size < n) {
+    if (type === '3d') nums.add(String(Math.floor(Math.random()*1000)).padStart(3,'0'));
+    else nums.add(String(Math.floor(Math.random()*100)).padStart(2,'0'));
+  }
+  const box = document.getElementById('danResult');
+  box.innerHTML = [...nums].map(n =>
+    `<span style="background:#c0392b;color:#fff;font-weight:800;padding:5px 10px;border-radius:4px;font-family:'Oswald',sans-serif;font-size:16px;letter-spacing:1px;">${n}</span>`
+  ).join('');
+}
+
+// Lô gan
+const ganData = [{n:'56',days:14},{n:'65',days:12},{n:'11',days:11},{n:'44',days:10},{n:'22',days:9},{n:'77',days:8},{n:'33',days:7},{n:'88',days:7},{n:'05',days:6},{n:'50',days:5}];
+const ganBox = document.getElementById('ganList');
+if(ganBox) ganData.forEach(g => {
+  const c = g.days>10?'background:#fdecea;color:#c0392b;border-color:#f5c6c0':g.days>=7?'background:#fff9e6;color:#f39c12;border-color:#f7dc6f':'background:#e8f5e9;color:#27ae60;border-color:#c8e6c9';
+  ganBox.innerHTML += `<span style="${c};padding:5px 10px;border-radius:4px;border:1px solid;font-weight:800;font-family:'Oswald',sans-serif;font-size:16px;cursor:pointer;" title="${g.days} ngày chưa về">${g.n}</span>`;
+});
+
+// Kiểm tra kết quả
+const kq = ['53728','14793','38471','62904','18274','95031','74628','30195','82746','51830','4827','3094','6173','8452','7312','2841','5693','0274','9185','3627','391','728','054','28','73','91','45'];
+function checkNumber() {
+  const inp = document.getElementById('checkNum').value;
+  const nums = inp.split(',').map(s => s.trim()).filter(Boolean);
+  const box = document.getElementById('checkResult');
+  if (!nums.length) { box.innerHTML = ''; return; }
+  let html = '';
+  nums.forEach(n => {
+    const found = kq.some(k => k.endsWith(n) || k === n);
+    html += `<div style="display:flex;align-items:center;gap:8px;padding:5px 0;font-size:13px;border-bottom:1px solid #f0f0f0;">
+      <span style="font-weight:800;font-family:'Oswald',sans-serif;font-size:16px;color:${found?'var(--red)':'#333'}">${n}</span>
+      <span style="padding:2px 10px;border-radius:10px;font-size:11px;font-weight:700;${found?'background:#e8f5e9;color:#27ae60':'background:#fafafa;color:#aaa'}">${found?'✅ TRÚNG':'❌ Không về'}</span>
+    </div>`;
+  });
+  box.innerHTML = html;
+}
+</script>

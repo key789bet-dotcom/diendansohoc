@@ -1,0 +1,78 @@
+<div class="auth-topnav">
+  <a class="brand" href="/home">GMSH DIỄN ĐÀN</a>
+  <a class="back" href="/home">← Về trang chủ</a>
+</div>
+<div class="auth-wrap">
+  <div class="auth-box" style="max-width:480px;">
+    <div class="auth-logo">
+      <div class="badge">GMSH</div>
+      <div class="title">Đăng Ký Tài Khoản</div>
+      <div class="sub">Tham gia cộng đồng cao thủ GMSH ngay hôm nay</div>
+    </div>
+    <div id="alertBox"></div>
+    <form action="/register" method="POST" onsubmit="return validateReg()">
+      <div class="form-row">
+        <div class="form-group"><label>Họ</label><input type="text" name="ho" placeholder="Nguyễn" required></div>
+        <div class="form-group"><label>Tên</label><input type="text" name="ten" placeholder="Văn A" required></div>
+      </div>
+      <div class="form-group">
+        <label>Tên đăng nhập <span style="color:#c0392b">*</span></label>
+        <input type="text" name="username" placeholder="vd: caothu_mb99" required>
+      </div>
+      <div class="form-group">
+        <label>Email <span style="color:#c0392b">*</span></label>
+        <input type="email" name="email" placeholder="email@gmail.com" required>
+      </div>
+      <div class="form-group">
+        <label>Số điện thoại</label>
+        <input type="tel" name="phone" placeholder="0987 xxx xxx">
+      </div>
+      <div class="form-group">
+        <label>Mật khẩu <span style="color:#c0392b">*</span></label>
+        <input type="password" name="password" id="pw" placeholder="Ít nhất 8 ký tự" required oninput="checkPw(this.value)">
+        <div class="pass-strength" id="pwStr"></div>
+      </div>
+      <div class="form-group">
+        <label>Xác nhận mật khẩu <span style="color:#c0392b">*</span></label>
+        <input type="password" name="confirm" id="cpw" placeholder="Nhập lại mật khẩu" required>
+      </div>
+      <div class="form-group">
+        <label>Vùng chơi yêu thích</label>
+        <select name="region">
+          <option value="">-- Chọn vùng --</option>
+          <option>Miền Bắc (MB)</option>
+          <option>Miền Nam (MN)</option>
+          <option>Miền Trung (MT)</option>
+          <option>Cả 3 miền</option>
+        </select>
+      </div>
+      <div class="rule-box"><ul>
+        <li>Không đăng nội dung phản cảm, spam</li>
+        <li>Không quảng cáo dịch vụ trái phép</li>
+        <li>Tôn trọng thành viên khác</li>
+      </ul></div>
+      <div class="terms-row">
+        <input type="checkbox" id="agree" required>
+        <label for="agree">Tôi đồng ý với <a href="#">Nội quy</a> và <a href="#">Điều khoản sử dụng</a></label>
+      </div>
+      <button type="submit" class="btn-submit">Đăng Ký Ngay</button>
+    </form>
+    <div class="auth-switch">Đã có tài khoản? <a href="/login">Đăng nhập</a></div>
+  </div>
+</div>
+<script>
+function checkPw(v) {
+  const el = document.getElementById('pwStr');
+  el.className = 'pass-strength ' + (v.length < 4 ? 'ps-w' : v.length < 8 ? 'ps-m' : 'ps-s');
+}
+function validateReg() {
+  const p1 = document.getElementById('pw').value;
+  const p2 = document.getElementById('cpw').value;
+  if (p1 !== p2) {
+    document.getElementById('alertBox').innerHTML = '<div class="alert alert-error">❌ Mật khẩu xác nhận không khớp!</div>';
+    return false;
+  }
+  document.getElementById('alertBox').innerHTML = '<div class="alert alert-info">🔄 Đang xử lý...</div>';
+  return true;
+}
+</script>

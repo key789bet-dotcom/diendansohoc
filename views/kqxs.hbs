@@ -1,0 +1,98 @@
+<style>
+.region-tabs{display:flex;border-bottom:3px solid var(--red);margin-bottom:12px;}
+.rtab{padding:9px 22px;font-size:13px;font-weight:700;cursor:pointer;border:1px solid #ddd;border-bottom:none;background:#f5f5f5;color:#555;transition:all .15s;border-radius:4px 4px 0 0;margin-right:3px;}
+.rtab.active{background:var(--red);color:#fff;border-color:var(--red);}
+.kqxs-full{width:100%;border-collapse:collapse;}
+.kqxs-full th{background:var(--red);color:#fff;padding:8px 12px;font-size:13px;font-weight:700;text-align:center;border:1px solid #a93226;}
+.kqxs-full td{padding:8px 12px;border:1px solid #eee;text-align:center;font-size:13px;}
+.kqxs-full tr:hover td{background:#fffbf2;}
+.prize-label{text-align:left!important;font-weight:600;color:#555;background:#fafafa;}
+.prize-special{font-size:24px;font-weight:900;color:var(--red);font-family:'Oswald',sans-serif;letter-spacing:3px;}
+.prize-1{font-size:18px;font-weight:800;color:var(--red);font-family:'Oswald',sans-serif;letter-spacing:2px;}
+.date-nav{display:flex;align-items:center;gap:8px;padding:10px 12px;border-bottom:1px solid #eee;background:#fff9e6;flex-wrap:wrap;}
+.date-nav button{padding:5px 12px;border:1px solid #ddd;border-radius:3px;background:#fff;cursor:pointer;font-size:13px;transition:all .15s;}
+.date-nav button:hover{background:var(--red);color:#fff;border-color:var(--red);}
+.dau-duoi{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:10px 12px;}
+.dd-box{background:#fdecea;border-radius:4px;padding:10px;text-align:center;}
+.dd-box.dau{background:#e3f2fd;}
+.dd-n{font-size:32px;font-weight:900;color:var(--red);font-family:'Oswald',sans-serif;}
+.dd-box.dau .dd-n{color:var(--blue);}
+.dd-l{font-size:11px;color:#888;margin-top:2px;}
+.freq-grid{display:flex;flex-wrap:wrap;gap:5px;padding:10px;}
+.freq-n{width:38px;height:38px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;font-family:'Oswald',sans-serif;cursor:pointer;border:1px solid #eee;background:#f9f9f9;color:#444;transition:transform .1s;}
+.freq-n:hover{transform:scale(1.1);}
+</style>
+
+<div class="breadcrumb"><a href="/home">Trang chủ</a><span class="sep">›</span><span>Kết quả xổ số</span></div>
+
+<div class="region-tabs">
+  <div class="rtab active" onclick="switchRegion(this,'mb')">🔴 Miền Bắc</div>
+  <div class="rtab" onclick="switchRegion(this,'mt')">🟡 Miền Trung</div>
+  <div class="rtab" onclick="switchRegion(this,'mn')">🟢 Miền Nam</div>
+</div>
+
+<div id="region-mb">
+  <div class="card fade-up">
+    <div class="card-head">
+      <span><span style="width:8px;height:8px;background:#e74c3c;border-radius:50%;display:inline-block;margin-right:6px;animation:blink 1s infinite;"></span>KQXS MIỀN BẮC — THỨ NĂM 23/04/2026</span>
+      <span style="font-size:11px;color:rgba(255,255,255,.7)">Cập nhật: 18:35</span>
+    </div>
+    <div class="date-nav">
+      <button>◀ Hôm qua</button>
+      <input type="date" value="2026-04-23" style="padding:5px 10px;border:1px solid #ddd;border-radius:3px;font-size:13px;">
+      <button style="background:var(--red);color:#fff;border-color:var(--red);">🔄 Hôm nay</button>
+    </div>
+    <div class="dau-duoi">
+      <div class="dd-box dau"><div class="dd-n">2</div><div class="dd-l">Đầu hôm nay</div></div>
+      <div class="dd-box"><div class="dd-n">8</div><div class="dd-l">Đuôi hôm nay</div></div>
+    </div>
+    <table class="kqxs-full">
+      <thead><tr><th style="width:140px">Giải</th><th>Kết quả</th></tr></thead>
+      <tbody>
+        <tr><td class="prize-label">🏆 Giải Đặc Biệt</td><td><span class="prize-special">53728</span></td></tr>
+        <tr><td class="prize-label">🥇 Giải Nhất</td><td><span class="prize-1">14793</span></td></tr>
+        <tr><td class="prize-label">🥈 Giải Nhì</td><td><b>38471</b> &nbsp;—&nbsp; <b>62904</b></td></tr>
+        <tr><td class="prize-label">🥉 Giải Ba</td><td>18274 — 95031 — 74628 — 30195 — 82746 — 51830</td></tr>
+        <tr><td class="prize-label">Giải Tư</td><td>4827 — 3094 — 6173 — 8452</td></tr>
+        <tr><td class="prize-label">Giải Năm</td><td>7312 — 2841 — 5693 — 0274 — 9185 — 3627</td></tr>
+        <tr><td class="prize-label">Giải Sáu</td><td>391 — 728 — 054</td></tr>
+        <tr><td class="prize-label">Giải Bảy</td><td><b style="color:var(--red)">28</b> — <b style="color:var(--red)">73</b> — 91 — 45</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="card fade-up">
+    <div class="card-head">📊 TẦN SUẤT ĐẦU ĐỀ 30 NGÀY QUA</div>
+    <div class="freq-grid" id="freqGrid"></div>
+  </div>
+</div>
+
+<div id="region-mt" style="display:none">
+  <div class="card"><div class="card-head">🟡 KQXS MIỀN TRUNG — 23/04/2026</div>
+    <div style="padding:20px;text-align:center;color:#888;font-size:14px;">📡 Đang cập nhật kết quả...</div></div>
+</div>
+<div id="region-mn" style="display:none">
+  <div class="card"><div class="card-head">🟢 KQXS MIỀN NAM — 23/04/2026</div>
+    <div style="padding:20px;text-align:center;color:#888;font-size:14px;">📡 Đang cập nhật kết quả...</div></div>
+</div>
+
+<script>
+function switchRegion(el, r) {
+  document.querySelectorAll('.rtab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  ['mb','mt','mn'].forEach(x => {
+    document.getElementById('region-'+x).style.display = x===r?'block':'none';
+  });
+}
+// Tần suất
+const freq = [12,8,15,6,11,9,14,7,10,5,13,9,11,8,16,6,10,12,7,9,14,8,11,6,13,9,10,8,7,12,11,15,9,8,10,6,13,11,9,7,12,8,10,14,9,7,11,13,8,6,10,9,12,8,11,7,14,9,10,6,13,8,11,9,12,7,10,8,15,9,6,11,13,8,10,9,7,12,11,8,10,14,9,7,11,8,13,10,9,6,12,8,11,7,10,9,14,8,11,7];
+const colors = ['#e74c3c','#c0392b','#f39c12','#27ae60'];
+const g = document.getElementById('freqGrid');
+if(g) freq.slice(0,100).forEach((f,i)=>{
+  const d=document.createElement('div'); d.className='freq-n';
+  const c=f>=13?colors[1]:f>=10?colors[0]:f>=7?colors[2]:colors[3];
+  d.style.cssText=`background:${c}22;color:${c};border-color:${c}44;font-size:${9+f/4}px`;
+  d.title=`Số ${String(i).padStart(2,'0')}: ${f} lần`;
+  d.textContent=String(i).padStart(2,'0');
+  g.appendChild(d);
+});
+</script>

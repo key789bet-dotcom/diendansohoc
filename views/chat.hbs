@@ -1,0 +1,131 @@
+<style>
+.chat-page{max-width:1000px;margin:12px auto;padding:0 14px;}
+.chat-layout{display:grid;grid-template-columns:220px 1fr;gap:12px;height:calc(100vh - 190px);min-height:500px;}
+.chat-rooms{background:#fff;border:1px solid var(--border);border-radius:4px;display:flex;flex-direction:column;overflow:hidden;}
+.rooms-head{background:var(--red);color:#fff;padding:10px 12px;font-weight:700;font-size:13px;font-family:'Oswald',sans-serif;}
+.room-list{overflow-y:auto;flex:1;}
+.room-item{padding:9px 12px;border-bottom:1px solid #f0f0f0;cursor:pointer;transition:background .15s;}
+.room-item:hover,.room-item.active{background:#fdecea;}
+.room-name{font-weight:600;font-size:13px;color:#333;}
+.room-item.active .room-name{color:var(--red);}
+.room-online{font-size:11px;color:#aaa;}
+.chat-main{background:#fff;border:1px solid var(--border);border-radius:4px;display:flex;flex-direction:column;overflow:hidden;}
+.chat-main-head{background:var(--red);color:#fff;padding:10px 14px;font-weight:700;font-size:14px;font-family:'Oswald',sans-serif;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;}
+.chat-msgs{flex:1;overflow-y:auto;padding:12px;background:#fafafa;}
+.chat-msgs::-webkit-scrollbar{width:5px;}
+.chat-msgs::-webkit-scrollbar-thumb{background:#ddd;border-radius:5px;}
+.msg{display:flex;gap:8px;margin-bottom:10px;}
+.msg-ava{width:30px;height:30px;border-radius:50%;font-family:'Oswald',sans-serif;font-size:11px;font-weight:700;color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.msg-bubble{max-width:75%;}
+.msg-meta{font-size:11px;color:#aaa;margin-bottom:2px;}
+.msg-meta .un{color:var(--red);font-weight:700;margin-right:6px;}
+.msg-meta .un.adm{color:#c0392b;}
+.msg-text{background:#fff;border:1px solid #eee;border-radius:0 8px 8px 8px;padding:7px 10px;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,.05);}
+.msg.me{flex-direction:row-reverse;}
+.msg.me .msg-text{background:#fdecea;border-color:#f5c6c0;border-radius:8px 0 8px 8px;}
+.msg.me .msg-meta{text-align:right;}
+.chat-input-area{padding:10px 12px;border-top:1px solid #eee;flex-shrink:0;}
+.emoji-bar{display:flex;gap:5px;margin-bottom:6px;flex-wrap:wrap;}
+.em-btn{background:none;border:none;font-size:18px;cursor:pointer;padding:2px;transition:transform .1s;}
+.em-btn:hover{transform:scale(1.3);}
+.chat-input-row2{display:flex;gap:8px;}
+.chat-text-inp{flex:1;padding:9px 14px;border:1px solid #ddd;border-radius:20px;font-size:13px;outline:none;font-family:inherit;}
+.chat-text-inp:focus{border-color:var(--red);}
+.chat-send-btn{background:var(--red);color:#fff;border:none;border-radius:50%;width:40px;height:40px;font-size:16px;cursor:pointer;flex-shrink:0;transition:background .15s;}
+.chat-send-btn:hover{background:var(--red-dk);}
+.online-list{padding:8px;}
+.online-section-lbl{font-size:10px;font-weight:700;color:#888;padding:5px 0;border-top:1px solid #eee;margin-top:4px;text-transform:uppercase;}
+.ol-user{display:flex;align-items:center;gap:6px;padding:3px 0;font-size:12px;}
+.ol-dot{width:7px;height:7px;border-radius:50%;background:var(--green);flex-shrink:0;}
+.ol-user a{color:#333;font-weight:600;}
+.ol-user a:hover{color:var(--red);}
+@media(max-width:700px){.chat-layout{grid-template-columns:1fr;height:auto;}.chat-rooms{height:120px;}}
+</style>
+
+<div class="chat-page">
+  <div class="breadcrumb"><a href="/home">Trang chủ</a><span class="sep">›</span><span>Chat Live</span></div>
+  <div class="chat-layout">
+
+    <!-- ROOMS -->
+    <div class="chat-rooms">
+      <div class="rooms-head">💬 Phòng Chat</div>
+      <div class="room-list">
+        <div class="room-item active" onclick="switchRoom(this,'Phòng Nhập Môn',247)"><div class="room-name">🔥 Phòng Nhập Môn</div><div class="room-online">247 online</div></div>
+        <div class="room-item" onclick="switchRoom(this,'Miền Bắc',89)"><div class="room-name">🎯 Miền Bắc</div><div class="room-online">89 online</div></div>
+        <div class="room-item" onclick="switchRoom(this,'Miền Nam',63)"><div class="room-name">🌴 Miền Nam</div><div class="room-online">63 online</div></div>
+        <div class="room-item" onclick="switchRoom(this,'Miền Trung',34)"><div class="room-name">🌺 Miền Trung</div><div class="room-online">34 online</div></div>
+        <div class="room-item" onclick="switchRoom(this,'VIP Cao Thủ',12)"><div class="room-name">👑 VIP Cao Thủ</div><div class="room-online">12 online</div></div>
+        <div class="room-item" onclick="switchRoom(this,'Phân Tích',28)"><div class="room-name">📊 Phân Tích</div><div class="room-online">28 online</div></div>
+      </div>
+      <div class="online-list">
+        <div class="online-section-lbl">👥 ONLINE</div>
+        <div class="ol-user"><div class="ol-dot"></div><a href="/profile/VHPRO85">VHPRO85</a> <span style="color:var(--gold);font-size:10px">👑</span></div>
+        <div class="ol-user"><div class="ol-dot"></div><a href="/profile/sosegiau68">sosegiau68</a></div>
+        <div class="ol-user"><div class="ol-dot"></div><a href="/profile/BEOHP88">BEOHP88</a></div>
+        <div class="ol-user"><div class="ol-dot"></div><a href="/profile/thantai779">thantai779</a></div>
+        <div style="font-size:11px;color:#aaa;margin-top:4px;">+243 thành viên khác</div>
+      </div>
+    </div>
+
+    <!-- MAIN CHAT -->
+    <div class="chat-main">
+      <div class="chat-main-head">
+        <span id="roomTitle">🔥 Phòng Nhập Môn — 247 Online</span>
+        <span style="font-size:12px;color:rgba(255,255,255,.7);font-family:'Be Vietnam Pro',sans-serif;">KQXS MB: ĐB 53728</span>
+      </div>
+      <div class="chat-msgs" id="chatMsgs">
+        <div class="msg"><div class="msg-ava" style="background:var(--red)">VH</div><div class="msg-bubble"><div class="msg-meta"><span class="un adm">VHPRO85</span><span>16:35</span></div><div class="msg-text">đề đuôi chạm 84 x 3 kỳ +1, anh em cẩn thận nha</div></div></div>
+        <div class="msg"><div class="msg-ava" style="background:var(--blue)">SG</div><div class="msg-bubble"><div class="msg-meta"><span class="un">sosegiau68</span><span>16:20</span></div><div class="msg-text">Chốt đầu 2 hôm nay nha, cầu khá mạnh rồi</div></div></div>
+        <div class="msg"><div class="msg-ava" style="background:var(--red)">VH</div><div class="msg-bubble"><div class="msg-meta"><span class="un adm">VHPRO85</span><span>16:10</span></div><div class="msg-text">Giải 1 chạm 147 x 3 kỳ, gãy std H chạm 8 tay 3. 7/3 +1</div></div></div>
+        <div class="msg"><div class="msg-ava" style="background:var(--purple)">BE</div><div class="msg-bubble"><div class="msg-meta"><span class="un">BEOHP88</span><span>15:55</span></div><div class="msg-text">Cho mình xin dàn đề hôm nay với anh VHPRO85</div></div></div>
+        <div class="msg me"><div class="msg-ava" style="background:var(--green)">Bạn</div><div class="msg-bubble"><div class="msg-meta"><span class="un">Bạn</span><span>15:05</span></div><div class="msg-text">Chào anh em! Mới tham gia, hôm nay nên chốt đuôi mấy ạ?</div></div></div>
+      </div>
+      <div class="chat-input-area">
+        <div class="emoji-bar">
+          <button class="em-btn" onclick="addEmo('😀')">😀</button>
+          <button class="em-btn" onclick="addEmo('🎯')">🎯</button>
+          <button class="em-btn" onclick="addEmo('🏆')">🏆</button>
+          <button class="em-btn" onclick="addEmo('💰')">💰</button>
+          <button class="em-btn" onclick="addEmo('🔥')">🔥</button>
+          <button class="em-btn" onclick="addEmo('👍')">👍</button>
+          <button class="em-btn" onclick="addEmo('❤️')">❤️</button>
+          <button class="em-btn" onclick="addEmo('🎲')">🎲</button>
+        </div>
+        <div class="chat-input-row2">
+          <input type="text" class="chat-text-inp" id="liveInput" placeholder="Nhắn tin..." />
+          <button class="chat-send-btn" onclick="sendLive()">➤</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+document.querySelectorAll('.room-item').forEach(r => {
+  r.onclick = function() {
+    document.querySelectorAll('.room-item').forEach(x => x.classList.remove('active'));
+    this.classList.add('active');
+  };
+});
+function switchRoom(el, name, cnt) {
+  document.querySelectorAll('.room-item').forEach(x => x.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('roomTitle').textContent = `${name} — ${cnt} Online`;
+}
+function addEmo(e) {
+  document.getElementById('liveInput').value += e;
+  document.getElementById('liveInput').focus();
+}
+function sendLive() {
+  const inp = document.getElementById('liveInput');
+  const box = document.getElementById('chatMsgs');
+  const msg = inp.value.trim(); if (!msg) return;
+  const t = new Date().toTimeString().slice(0,5);
+  const d = document.createElement('div'); d.className = 'msg me';
+  d.innerHTML = `<div class="msg-ava" style="background:var(--green)">Bạn</div><div class="msg-bubble"><div class="msg-meta"><span class="un">Bạn</span><span>${t}</span></div><div class="msg-text">${msg.replace(/</g,'&lt;')}</div></div>`;
+  box.appendChild(d); box.scrollTop = box.scrollHeight; inp.value = '';
+}
+document.getElementById('liveInput').addEventListener('keypress', e => { if (e.key === 'Enter') sendLive(); });
+document.getElementById('chatMsgs').scrollTop = 9999;
+</script>

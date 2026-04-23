@@ -1,0 +1,79 @@
+<style>
+.bxh-hero{background:linear-gradient(135deg,#8e1a0e,#c0392b);border-radius:4px;padding:20px;margin-bottom:12px;color:#fff;text-align:center;}
+.bxh-hero h1{font-family:'Oswald',sans-serif;font-size:26px;font-weight:700;margin-bottom:4px;}
+.top3{display:grid;grid-template-columns:1fr 1.2fr 1fr;gap:10px;margin-bottom:12px;}
+.top-card{background:#fff;border:1px solid var(--border);border-radius:6px;padding:14px 10px;text-align:center;box-shadow:var(--shadow);}
+.top-card.r1{background:linear-gradient(135deg,#fff9e6,#fff);border-color:var(--gold);}
+.top-card.r2{background:linear-gradient(135deg,#f5f5f5,#fff);border-color:#bdc3c7;}
+.top-card.r3{background:linear-gradient(135deg,#fff5e6,#fff);border-color:#e67e22;}
+.t-ava{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Oswald',sans-serif;font-size:17px;font-weight:700;color:#fff;margin:6px auto;}
+.t-name{font-weight:800;font-size:14px;}
+.t-score{font-family:'Oswald',sans-serif;font-size:24px;font-weight:700;}
+.bxh-table{width:100%;border-collapse:collapse;}
+.bxh-table th{background:var(--red);color:#fff;padding:8px 12px;font-size:13px;font-weight:700;text-align:center;}
+.bxh-table td{padding:9px 12px;border-bottom:1px solid #f0f0f0;vertical-align:middle;font-size:13px;text-align:center;}
+.bxh-table tr:hover td{background:#fffbf2;}
+.rk{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;margin:0 auto;}
+.rk.r1{background:var(--gold);color:#fff;}
+.rk.r2{background:#bdc3c7;color:#fff;}
+.rk.r3{background:#e67e22;color:#fff;}
+.rk.other{background:#eee;color:#555;}
+.u-row{display:flex;align-items:center;gap:8px;}
+.u-ava{width:32px;height:32px;border-radius:50%;font-family:'Oswald',sans-serif;font-size:12px;font-weight:700;color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.trend-up{color:var(--green);font-weight:700;}
+.trend-dn{color:var(--red);font-weight:700;}
+.trend-eq{color:#aaa;}
+.mtab{padding:5px 12px;border:1px solid #ddd;border-radius:3px;font-size:12px;font-weight:600;cursor:pointer;background:#fff;color:#555;transition:all .15s;}
+.mtab.active{background:var(--red);color:#fff;border-color:var(--red);}
+</style>
+
+<div class="breadcrumb"><a href="/home">Trang chủ</a><span class="sep">›</span><span>Bảng xếp hạng cao thủ</span></div>
+
+<div class="bxh-hero fade-up">
+  <h1>🏆 BẢNG XẾP HẠNG CAO THỦ</h1>
+  <p style="color:rgba(255,255,255,.75);font-size:13px;">Xếp hạng dựa trên số lần dự đoán chính xác • Cập nhật mỗi ngày sau 18:35</p>
+</div>
+
+<div class="top3 fade-up">
+  <div class="top-card r2"><div style="font-size:28px">🥈</div><div class="t-ava" style="background:#7f8c8d">BE</div><div class="t-name"><a href="/profile/BEOHP88">BEOHP88</a></div><div class="t-score" style="color:#7f8c8d">70</div><div style="font-size:11px;color:#888;">35/50 — 70%</div></div>
+  <div class="top-card r1"><div style="font-size:34px">🥇</div><div class="t-ava" style="background:var(--red)">SG</div><div class="t-name" style="font-size:16px"><a href="/profile/sosegiau68">sosegiau68</a></div><div class="t-score" style="color:var(--red)">72</div><div style="font-size:11px;color:#888;">36/50 — 72%</div></div>
+  <div class="top-card r3"><div style="font-size:28px">🥉</div><div class="t-ava" style="background:#e67e22">LD</div><div class="t-name"><a href="/profile/ledung123d">ledung123d</a></div><div class="t-score" style="color:#e67e22">68</div><div style="font-size:11px;color:#888;">34/50 — 68%</div></div>
+</div>
+
+<div class="card fade-up">
+  <div class="card-head">📅 CHỌN THÁNG</div>
+  <div style="padding:8px 10px;display:flex;gap:6px;flex-wrap:wrap;">
+    <button class="mtab active" onclick="setMtab(this)">Tháng 4/2026</button>
+    <button class="mtab" onclick="setMtab(this)">Tháng 3/2026</button>
+    <button class="mtab" onclick="setMtab(this)">Tháng 2/2026</button>
+    <button class="mtab" onclick="setMtab(this)">Tất cả thời gian</button>
+  </div>
+</div>
+
+<div class="card fade-up">
+  <div class="card-head">🎖️ BẢNG XẾP HẠNG ĐẦY ĐỦ — T4/2026</div>
+  <table class="bxh-table">
+    <thead><tr><th style="width:50px">#</th><th style="text-align:left;padding-left:16px">Thành viên</th><th>Điểm</th><th>Trúng</th><th>Tỉ lệ</th><th>Xu hướng</th><th></th></tr></thead>
+    <tbody>
+      {{#each bxh}}
+      <tr>
+        <td><div class="rk {{#if (eq rank 1)}}r1{{else}}{{#if (eq rank 2)}}r2{{else}}{{#if (eq rank 3)}}r3{{else}}other{{/if}}{{/if}}{{/if}}">{{rank}}</div></td>
+        <td><div class="u-row" style="padding-left:4px"><div class="u-ava" style="background:var(--red)">{{name}}</div><div><div style="font-weight:700;color:#111"><a href="/profile/{{name}}">{{name}}</a></div><div style="font-size:10px;color:#888">⭐ Cao Thủ</div></div></div></td>
+        <td style="font-weight:800;color:var(--red);font-size:15px">{{diem}}</td>
+        <td>{{diem}}/100</td>
+        <td>{{ty_le}}</td>
+        <td><span class="trend-up">▲ +2</span></td>
+        <td><a href="/profile/{{name}}" class="btn btn-red btn-sm">Hồ sơ</a></td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+  <div class="pagi"><a class="cur" href="#">1</a><a href="#">2</a><a href="#">3</a><a href="#">Sau »</a></div>
+</div>
+
+<script>
+function setMtab(btn) {
+  document.querySelectorAll('.mtab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+</script>
