@@ -22,4 +22,24 @@ async function saveAvatar(buffer, username) {
   return `/uploads/avatars/${filename}`;
 }
 
-module.exports = { upload, saveAvatar };
+
+const uploadPost = multer({
+  storage: multer.diskStorage({
+    destination: (req, file, cb) => {
+      const dir = '/var/www/diendansohoc/public/uploads/posts';
+      require('fs').mkdirSync(dir, { recursive: true });
+      cb(null, dir);
+    },
+    filename: (req, file, cb) => {
+      const ext = require('path').extname(file.originalname).toLowerCase();
+      cb(null, 'post_' + Date.now() + ext);
+    }
+  }),
+  limits: { fileSize: 5 * 1024 * 1024 },
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) cb(null, true);
+    else cb(new Error('Chỉ chấp nhận file ảnh!'));
+  }
+});
+
+module.exports = { upload, saveAvatar, uploadPost };

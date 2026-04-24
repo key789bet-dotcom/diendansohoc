@@ -60,6 +60,9 @@
             <button type="button" onclick="fmt('italic')" style="padding:3px 10px;border:1px solid #ddd;border-radius:3px;background:#fff;font-style:italic;cursor:pointer;">I</button>
             <button type="button" onclick="fmt('underline')" style="padding:3px 10px;border:1px solid #ddd;border-radius:3px;background:#fff;text-decoration:underline;cursor:pointer;">U</button>
             <button type="button" onclick="insertNum()" style="padding:3px 10px;border:1px solid #ddd;border-radius:3px;background:#c0392b;color:#fff;font-weight:700;cursor:pointer;">🔴 Số</button>
+            <button type="button" onclick="document.getElementById('imgUpload').click()" style="padding:3px 10px;border:1px solid #ddd;border-radius:3px;background:#2980b9;color:#fff;font-weight:700;cursor:pointer;">🖼️ Ảnh</button>
+            <input type="file" id="imgUpload" accept="image/*" style="display:none;" onchange="uploadImage(this)">
+            <span id="uploadStatus" style="font-size:11px;color:#888;"></span>
           </div>
           <div id="editor" contenteditable="true"
             style="min-height:200px;padding:12px;font-size:14px;outline:none;line-height:1.8;"
@@ -91,6 +94,34 @@ function insertNum() {
       `<span style="background:#c0392b;color:#fff;font-weight:800;padding:1px 6px;border-radius:3px;font-size:13px;">${num}</span>`);
   }
 }
+async function uploadImage(input) {
+  const file = input.files[0];
+  if (!file) return;
+  if (file.size > 5 * 1024 * 1024) { alert('Ảnh quá lớn! Tối đa 5MB'); return; }
+  
+  const status = document.getElementById('uploadStatus');
+  status.textContent = '⏳ Đang tải ảnh...';
+  
+  const formData = new FormData();
+  formData.append('image', file);
+  
+  try {
+    const res = await fetch('/upload-image', { method: 'POST', body: formData });
+    const data = await res.json();
+    if (data.url) {
+      document.execCommand('insertHTML', false,
+        `<img src="${data.url}" style="max-width:100%;border-radius:4px;margin:8px 0;" />`);
+      status.textContent = '✅ Đã chèn ảnh!';
+      setTimeout(() => status.textContent = '', 2000);
+    } else {
+      status.textContent = '❌ Lỗi tải ảnh!';
+    }
+  } catch(e) {
+    status.textContent = '❌ Lỗi kết nối!';
+  }
+  input.value = '';
+}
+
 function submitPost() {
   document.getElementById('contentInput').value =
     document.getElementById('editor').innerHTML;

@@ -435,7 +435,7 @@ router.post('/admin/post/:id/reject', requireAdmin, async (req,res) => {
 
 
 // ── UPLOAD AVATAR ─────────────────────────────────────────────────────────────
-const { upload, saveAvatar } = require('../upload');
+const { upload, saveAvatar, uploadPost } = require('../upload');
 
 router.post('/settings/avatar', upload.single('avatar'), async (req,res) => {
   if (!req.session.user) return res.redirect('/login');
@@ -564,6 +564,20 @@ router.post('/messages/:userId/send', async (req,res) => {
     await db.query('INSERT INTO messages (from_user_id, to_user_id, content) VALUES (?,?,?)', [req.session.user.id, req.params.userId, content]);
     res.json({ success: true });
   } catch(e) { res.json({ error: e.message }); }
+});
+
+
+// ── UPLOAD ẢNH BÀI VIẾT ───────────────────────────────────────────────────────
+router.post('/upload-image', (req,res,next) => {
+  if (!req.session.user) return res.json({ error: 'Chưa đăng nhập' });
+  next();
+}, uploadPost.single('image'), async (req,res) => {
+  try {
+    if (!req.file) return res.json({ error: 'Không có file!' });
+    res.json({ url: '/uploads/posts/' + req.file.filename });
+  } catch(e) {
+    res.json({ error: e.message });
+  }
 });
 
 module.exports = router;
