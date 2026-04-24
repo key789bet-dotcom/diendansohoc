@@ -41,7 +41,11 @@ app.engine('hbs', engine({
   layoutsDir:  path.join(__dirname, 'views/layouts'),
   partialsDir: path.join(__dirname, 'views/partials'),
   helpers: {
-    eq:  (a, b) => a === b,
+    eq: (a, b) => a === b,
+    timeAgo: (date) => {
+      const d = new Date(date);
+      return d.toLocaleTimeString('vi-VN', {hour:'2-digit',minute:'2-digit'});
+    },
     neq: (a, b) => a !== b,
     gt:  (a, b) => a > b,
     lt:  (a, b) => a < b,

@@ -12,9 +12,10 @@ router.get('/', (req,res) => res.redirect('/home'));
 router.get('/home', async (req,res) => {
   try {
     const [cats] = await db.query('SELECT * FROM categories ORDER BY sort_order');
+    const [chatHistory] = await db.query("SELECT m.*,u.username,u.avatar FROM chat_messages m JOIN users u ON m.user_id=u.id WHERE m.room='nhap-mon' ORDER BY m.created_at DESC LIMIT 20");
     const [bxh2] = await db.query('SELECT l.*,u.username as name FROM leaderboard l JOIN users u ON l.user_id=u.id WHERE l.month=MONTH(NOW()) AND l.year=YEAR(NOW()) ORDER BY l.diem DESC LIMIT 5');
     const [b] = await db.query('SELECT p.*,u.username as author,c.name as tagLabel FROM posts p JOIN users u ON p.user_id=u.id JOIN categories c ON p.category_id=c.id ORDER BY p.created_at DESC LIMIT 20');
-    res.render('home',{title:'Trang Chủ',pageHome:true,kqxs:{ dacBiet:"--", nhat:"--", dau:"-", duoi:"-" },bxh:bxh2.length?bxh2:mockBxh(),cats,baiViet:b.length?b:mockBaiViet(),user:req.session.user||null});
+    res.render('home',{title:'Trang Chủ',pageHome:true,kqxs:{ dacBiet:"--", nhat:"--", dau:"-", duoi:"-" },bxh:bxh2.length?bxh2:mockBxh(),cats,chatHistory:chatHistory.reverse(),baiViet:b.length?b:mockBaiViet(),user:req.session.user||null});
   } catch(e){ res.render('home',{title:'Trang Chủ',pageHome:true,kqxs:{ dacBiet:"--", nhat:"--", dau:"-", duoi:"-" },bxh:mockBxh(),baiViet:mockBaiViet(),user:null}); }
 });
 
@@ -66,6 +67,7 @@ router.get('/soi-cau',(req,res)=>res.render('soi-cau',{title:'Soi Cầu',kqxs:{ 
 router.get('/cao-thu', async (req,res) => {
   try {
     const [cats] = await db.query('SELECT * FROM categories ORDER BY sort_order');
+    const [chatHistory] = await db.query("SELECT m.*,u.username,u.avatar FROM chat_messages m JOIN users u ON m.user_id=u.id WHERE m.room='nhap-mon' ORDER BY m.created_at DESC LIMIT 20");
     const [bxh] = await db.query(`
       SELECT l.*, u.username as name, u.user_rank,
              ROUND(l.trung/GREATEST(l.tong_du_doan,1)*100) as ty_le,
@@ -97,6 +99,7 @@ function mockBaiViet(){return[{id:1,tag:'tl',tagLabel:'Thảo luận',title:'CÁ
 router.get('/create-post', (req,res,next)=>{if(!req.session||!req.session.user){return res.redirect('/login');}next()}, async (req,res) => {
   try {
     const [cats] = await db.query('SELECT * FROM categories ORDER BY sort_order');
+    const [chatHistory] = await db.query("SELECT m.*,u.username,u.avatar FROM chat_messages m JOIN users u ON m.user_id=u.id WHERE m.room='nhap-mon' ORDER BY m.created_at DESC LIMIT 20");
     res.render('create-post', { title: 'Đăng Bài Viết — GMSH', cats, user: req.session.user });
   } catch(e) { res.redirect('/forum'); }
 });

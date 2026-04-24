@@ -16,10 +16,13 @@
 <div class="card">
   <div class="card-head">💬 CHAT NHẬP MÔN</div>
   <div class="chat-box" id="chatBox">
-    <div class="chat-msg"><span class="chat-user adm">@ VHPRO85</span><span class="chat-time">16:35</span><br><span class="chat-text">đề đuôi chạm 84 x 3 kỳ +1</span></div>
-    <div class="chat-msg"><span class="chat-user">@ sosegiau68</span><span class="chat-time">16:20</span><br><span class="chat-text">chốt đầu 2 hôm nay nha anh em</span></div>
-    <div class="chat-msg"><span class="chat-user adm">@ VHPRO85</span><span class="chat-time">16:10</span><br><span class="chat-text">Giải 1 chạm 147 x 3 kỳ</span></div>
-    <div class="chat-msg"><span class="chat-user">@ BEOHP88</span><span class="chat-time">15:55</span><br><span class="chat-text">cho xin dàn đề hôm nay đi bro</span></div>
+    {{#each chatHistory}}
+    <div class="chat-msg">
+      <span class="chat-user {{#if (eq username 'ADMIN')}}adm{{/if}}">@ {{username}}</span>
+      <span class="chat-time">{{username}}</span><br>
+      <span class="chat-text">{{message}}</span>
+    </div>
+    {{/each}}
   </div>
   <p class="chat-hint">Gõ /nick tên để đặt biệt hiệu</p>
   <div class="chat-input-row">
