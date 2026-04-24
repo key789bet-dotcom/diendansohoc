@@ -16,7 +16,8 @@
   <div style="display:flex;align-items:center;gap:8px;">
     <a href="/profile/{{user.username}}" style="color:#fff;font-weight:700;font-size:13px;">👤 {{user.username}}</a>
     <a href="/profile/{{user.username}}" class="btn btn-outline">Hồ sơ</a>
-    <a href="/notifications" class="btn btn-outline" style="color:#fff;border-color:rgba(255,255,255,.3);position:relative;">🔔 <span id="notifBadge" style="display:none;position:absolute;top:-4px;right:-4px;background:#f39c12;color:#fff;font-size:9px;padding:1px 4px;border-radius:8px;font-weight:700;">0</span></a><a href="/settings" class="btn btn-outline" style="color:#fff;border-color:rgba(255,255,255,.3);">⚙️ Cài đặt</a><a href="/logout" class="btn btn-gold">Đăng xuất</a>
+    <a href="/messages" class="btn btn-outline" style="color:#fff;border-color:rgba(255,255,255,.3);position:relative;">✉️</a>
+      <a href="/notifications" class="btn btn-outline" style="color:#fff;border-color:rgba(255,255,255,.3);position:relative;">🔔 <span id="notifBadge" style="display:none;position:absolute;top:-4px;right:-4px;background:#f39c12;color:#fff;font-size:9px;padding:1px 4px;border-radius:8px;font-weight:700;">0</span></a><a href="/settings" class="btn btn-outline" style="color:#fff;border-color:rgba(255,255,255,.3);">⚙️ Cài đặt</a><a href="/logout" class="btn btn-gold">Đăng xuất</a>
   </div>
 {{else}}
   <a href="/login"    class="btn btn-outline">Đăng nhập</a>

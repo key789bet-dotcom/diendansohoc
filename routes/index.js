@@ -495,4 +495,75 @@ router.post('/post/:id/comment', async (req,res) => {
   } catch(e) { console.error(e); res.redirect('/post/' + postId); }
 });
 
+
+// ── MESSAGES ──────────────────────────────────────────────────────────────────
+router.get('/messages', async (req,res) => {
+  if (!req.session.user) return res.redirect('/login');
+  try {
+    const [conversations] = await db.query(`
+      SELECT 
+        CASE WHEN m.from_user_id = ? THEN m.to_user_id ELSE m.from_user_id END as other_id,
+        u.username as other_username,
+        MAX(m.content) as last_message,
+        SUM(CASE WHEN m.to_user_id = ? AND m.is_read = 0 THEN 1 ELSE 0 END) as unread
+      FROM messages m
+      JOIN users u ON u.id = CASE WHEN m.from_user_id = ? THEN m.to_user_id ELSE m.from_user_id END
+      WHERE m.from_user_id = ? OR m.to_user_id = ?
+      GROUP BY other_id, other_username
+      ORDER BY MAX(m.created_at) DESC
+    `, [req.session.user.id, req.session.user.id, req.session.user.id, req.session.user.id, req.session.user.id]);
+    res.render('messages', { title: 'Tin Nhắn — DDSH', conversations, user: req.session.user });
+  } catch(e) { console.error(e); res.redirect('/home'); }
+});
+
+router.get('/messages/new', (req,res) => {
+  if (!req.session.user) return res.redirect('/login');
+  const error = req.session.msgError; delete req.session.msgError;
+  res.render('messages-new', { title: 'Tin Nhắn Mới — DDSH', user: req.session.user, error });
+});
+
+router.post('/messages/new', async (req,res) => {
+  if (!req.session.user) return res.redirect('/login');
+  const { to_username, content } = req.body;
+  try {
+    const [users] = await db.query('SELECT id FROM users WHERE username = ?', [to_username]);
+    if (!users.length) { req.session.msgError = 'Không tìm thấy thành viên này!'; return res.redirect('/messages/new'); }
+    if (users[0].id === req.session.user.id) { req.session.msgError = 'Không thể nhắn tin cho chính mình!'; return res.redirect('/messages/new'); }
+    await db.query('INSERT INTO messages (from_user_id, to_user_id, content) VALUES (?,?,?)', [req.session.user.id, users[0].id, content]);
+    res.redirect('/messages/' + users[0].id);
+  } catch(e) { console.error(e); res.redirect('/messages/new'); }
+});
+
+router.get('/messages/:userId', async (req,res) => {
+  if (!req.session.user) return res.redirect('/login');
+  try {
+    const [users] = await db.query('SELECT id, username FROM users WHERE id = ?', [req.params.userId]);
+    if (!users.length) return res.redirect('/messages');
+    const [msgs] = await db.query(
+      'SELECT * FROM messages WHERE (from_user_id=? AND to_user_id=?) OR (from_user_id=? AND to_user_id=?) ORDER BY created_at ASC',
+      [req.session.user.id, req.params.userId, req.params.userId, req.session.user.id]
+    );
+    await db.query('UPDATE messages SET is_read=1 WHERE to_user_id=? AND from_user_id=?', [req.session.user.id, req.params.userId]);
+    const [conversations] = await db.query(`
+      SELECT CASE WHEN m.from_user_id = ? THEN m.to_user_id ELSE m.from_user_id END as other_id,
+        u.username as other_username, MAX(m.content) as last_message,
+        SUM(CASE WHEN m.to_user_id = ? AND m.is_read = 0 THEN 1 ELSE 0 END) as unread
+      FROM messages m
+      JOIN users u ON u.id = CASE WHEN m.from_user_id = ? THEN m.to_user_id ELSE m.from_user_id END
+      WHERE m.from_user_id = ? OR m.to_user_id = ?
+      GROUP BY other_id, other_username ORDER BY MAX(m.created_at) DESC
+    `, [req.session.user.id, req.session.user.id, req.session.user.id, req.session.user.id, req.session.user.id]);
+    res.render('messages', { title: 'Tin Nhắn — DDSH', conversations, msgs, activeId: parseInt(req.params.userId), activeUser: users[0].username, user: req.session.user });
+  } catch(e) { console.error(e); res.redirect('/messages'); }
+});
+
+router.post('/messages/:userId/send', async (req,res) => {
+  if (!req.session.user) return res.json({ error: 'Chưa đăng nhập' });
+  const { content } = req.body;
+  try {
+    await db.query('INSERT INTO messages (from_user_id, to_user_id, content) VALUES (?,?,?)', [req.session.user.id, req.params.userId, content]);
+    res.json({ success: true });
+  } catch(e) { res.json({ error: e.message }); }
+});
+
 module.exports = router;

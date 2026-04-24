@@ -1,0 +1,28 @@
+<div class="breadcrumb">
+  <a href="/home">Trang chủ</a><span class="sep">›</span>
+  <a href="/messages">Tin nhắn</a><span class="sep">›</span>
+  <span>Tin nhắn mới</span>
+</div>
+
+<div class="card fade-up" style="max-width:600px;">
+  <div class="card-head">✉️ GỬI TIN NHẮN MỚI</div>
+  <div style="padding:20px;">
+    {{#if error}}<div class="alert alert-error">❌ {{error}}</div>{{/if}}
+    <form action="/messages/new" method="POST">
+      <div style="margin-bottom:14px;">
+        <label style="font-size:13px;font-weight:600;color:#444;display:block;margin-bottom:5px;">Gửi đến</label>
+        <input type="text" name="to_username" placeholder="Nhập tên thành viên..." required
+          style="width:100%;padding:9px 12px;border:1px solid #ddd;border-radius:4px;font-size:13px;outline:none;">
+      </div>
+      <div style="margin-bottom:16px;">
+        <label style="font-size:13px;font-weight:600;color:#444;display:block;margin-bottom:5px;">Nội dung</label>
+        <textarea name="content" rows="5" required placeholder="Nhập nội dung tin nhắn..."
+          style="width:100%;padding:10px;border:1px solid #ddd;border-radius:4px;font-size:13px;resize:vertical;outline:none;font-family:inherit;"></textarea>
+      </div>
+      <div style="display:flex;justify-content:space-between;">
+        <a href="/messages" style="color:#888;font-size:13px;">← Quay lại</a>
+        <button type="submit" class="btn btn-red">✉️ Gửi tin nhắn</button>
+      </div>
+    </form>
+  </div>
+</div>
