@@ -317,3 +317,16 @@ input,textarea,select,button { font-family:inherit; }
   }
   .nav-link { min-height:var(--nav-h); }
 }
+
+@media (max-width:768px) {
+  .featured-grid { grid-template-columns:1fr !important; }
+  .page-wrap { grid-template-columns:1fr !important; }
+  .site-sidebar { display:none !important; }
+}
+.mobile-chat-box { display:none; }
+@media (max-width:768px) {
+  .mobile-chat-box { display:block !important; }
+  .featured-grid { grid-template-columns:1fr !important; }
+  .page-wrap { grid-template-columns:1fr !important; }
+  .site-sidebar { display:none !important; }
+}
