@@ -50,6 +50,11 @@ app.engine('hbs', engine({
     gt:  (a, b) => a > b,
     lt:  (a, b) => a < b,
     arr: (...args) => args.slice(0, -1),
+    formatDate: (date) => {
+      if (!date) return '';
+      const d = new Date(date);
+      return d.toLocaleDateString('vi-VN', {day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+    },
   }
 }));
 app.set('view engine', 'hbs');

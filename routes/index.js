@@ -11,10 +11,17 @@ router.get('/', (req,res) => res.redirect('/home'));
 
 router.get('/home', async (req,res) => {
   try {
-    const [cats] = await db.query('SELECT * FROM categories ORDER BY sort_order');
+    const [cats] = await db.query(`
+      SELECT c.*, 
+        (SELECT p.title FROM posts p WHERE p.category_id = c.id ORDER BY p.created_at DESC LIMIT 1) as last_title,
+        (SELECT p.id FROM posts p WHERE p.category_id = c.id ORDER BY p.created_at DESC LIMIT 1) as last_id,
+        (SELECT u.username FROM posts p JOIN users u ON p.user_id=u.id WHERE p.category_id = c.id ORDER BY p.created_at DESC LIMIT 1) as last_author,
+        (SELECT p.created_at FROM posts p WHERE p.category_id = c.id ORDER BY p.created_at DESC LIMIT 1) as last_date
+      FROM categories c ORDER BY c.sort_order
+    `);
     const [chatHistory] = await db.query("SELECT m.*,u.username,u.avatar FROM chat_messages m JOIN users u ON m.user_id=u.id WHERE m.room='nhap-mon' ORDER BY m.created_at DESC LIMIT 20");
     const [bxh2] = await db.query('SELECT l.*,u.username as name FROM leaderboard l JOIN users u ON l.user_id=u.id WHERE l.month=MONTH(NOW()) AND l.year=YEAR(NOW()) ORDER BY l.diem DESC LIMIT 5');
-    const [b] = await db.query('SELECT p.*,u.username as author,c.name as tagLabel FROM posts p JOIN users u ON p.user_id=u.id JOIN categories c ON p.category_id=c.id ORDER BY p.created_at DESC LIMIT 20');
+    const [b] = await db.query('SELECT p.*,u.username as author,c.name as tagLabel,u.avatar as author_avatar FROM posts p JOIN users u ON p.user_id=u.id JOIN categories c ON p.category_id=c.id ORDER BY p.created_at DESC LIMIT 20');
     res.render('home',{title:'Trang Chủ',pageHome:true,kqxs:{ dacBiet:"--", nhat:"--", dau:"-", duoi:"-" },bxh:bxh2.length?bxh2:mockBxh(),cats,chatHistory:chatHistory.reverse(),baiViet:b.length?b:mockBaiViet(),user:req.session.user||null});
   } catch(e){ res.render('home',{title:'Trang Chủ',pageHome:true,kqxs:{ dacBiet:"--", nhat:"--", dau:"-", duoi:"-" },bxh:mockBxh(),baiViet:mockBaiViet(),user:null}); }
 });
@@ -66,7 +73,14 @@ router.get('/kqxs',(req,res)=>res.render('kqxs',{title:'KQXS',kqxs:{ dacBiet:"--
 router.get('/soi-cau',(req,res)=>res.render('soi-cau',{title:'Soi Cầu',kqxs:{ dacBiet:"--", nhat:"--", dau:"-", duoi:"-" },user:req.session.user||null}));
 router.get('/cao-thu', async (req,res) => {
   try {
-    const [cats] = await db.query('SELECT * FROM categories ORDER BY sort_order');
+    const [cats] = await db.query(`
+      SELECT c.*, 
+        (SELECT p.title FROM posts p WHERE p.category_id = c.id ORDER BY p.created_at DESC LIMIT 1) as last_title,
+        (SELECT p.id FROM posts p WHERE p.category_id = c.id ORDER BY p.created_at DESC LIMIT 1) as last_id,
+        (SELECT u.username FROM posts p JOIN users u ON p.user_id=u.id WHERE p.category_id = c.id ORDER BY p.created_at DESC LIMIT 1) as last_author,
+        (SELECT p.created_at FROM posts p WHERE p.category_id = c.id ORDER BY p.created_at DESC LIMIT 1) as last_date
+      FROM categories c ORDER BY c.sort_order
+    `);
     const [chatHistory] = await db.query("SELECT m.*,u.username,u.avatar FROM chat_messages m JOIN users u ON m.user_id=u.id WHERE m.room='nhap-mon' ORDER BY m.created_at DESC LIMIT 20");
     const [bxh] = await db.query(`
       SELECT l.*, u.username as name, u.user_rank,
@@ -87,7 +101,7 @@ router.get('/cao-thu', async (req,res) => {
 });
 router.get('/chat',(req,res)=>res.render('chat',{title:'Chat',layout:'main-full',user:req.session.user||null}));
 router.get('/tools',(req,res)=>res.render('tools',{title:'Công Cụ',kqxs:{ dacBiet:"--", nhat:"--", dau:"-", duoi:"-" },user:req.session.user||null}));
-router.get('/search',async(req,res)=>{const q=req.query.q||'';try{let r=[];if(q){const [rows]=await db.query('SELECT p.*,u.username as author,c.name as tagLabel FROM posts p JOIN users u ON p.user_id=u.id JOIN categories c ON p.category_id=c.id WHERE p.title LIKE ? LIMIT 20',[`%${q}%`]);r=rows;}res.render('search',{title:'Tìm: '+q,q,results:r,kqxs:{ dacBiet:"--", nhat:"--", dau:"-", duoi:"-" },user:req.session.user||null});}catch(e){res.render('search',{title:'Tìm',q,results:[],kqxs:{ dacBiet:"--", nhat:"--", dau:"-", duoi:"-" },user:null});}});
+router.get('/search',async(req,res)=>{const q=req.query.q||'';try{let r=[];if(q){const [rows]=await db.query('SELECT p.*,u.username as author,c.name as tagLabel,u.avatar as author_avatar FROM posts p JOIN users u ON p.user_id=u.id JOIN categories c ON p.category_id=c.id WHERE p.title LIKE ? LIMIT 20',[`%${q}%`]);r=rows;}res.render('search',{title:'Tìm: '+q,q,results:r,kqxs:{ dacBiet:"--", nhat:"--", dau:"-", duoi:"-" },user:req.session.user||null});}catch(e){res.render('search',{title:'Tìm',q,results:[],kqxs:{ dacBiet:"--", nhat:"--", dau:"-", duoi:"-" },user:null});}});
 router.get('/admin',async(req,res)=>{try{const [[tp]]=await db.query('SELECT COUNT(*) as total_posts FROM posts');const [[tu]]=await db.query('SELECT COUNT(*) as total_users FROM users');const [rp]=await db.query('SELECT p.*,u.username as author FROM posts p JOIN users u ON p.user_id=u.id ORDER BY p.created_at DESC LIMIT 10');const [ru]=await db.query('SELECT * FROM users ORDER BY created_at DESC LIMIT 10');res.render('admin',{title:'Admin',layout:'admin',total_posts:tp.total_posts,total_users:tu.total_users,recentPosts:rp,recentUsers:ru,user:req.session.user||null});}catch(e){res.render('admin',{title:'Admin',layout:'admin',total_posts:0,total_users:0,recentPosts:[],recentUsers:[],user:null});}});
 
 function mockBxh(){return[{rank:1,name:'sosegiau68',diem:72,ty_le:'72%'},{rank:2,name:'BEOHP88',diem:70,ty_le:'70%'},{rank:3,name:'ledung123d',diem:68,ty_le:'68%'},{rank:4,name:'OTTHOC77',diem:66,ty_le:'66%'},{rank:5,name:'ANHVTP83',diem:64,ty_le:'64%'}];}
@@ -98,7 +112,14 @@ function mockBaiViet(){return[{id:1,tag:'tl',tagLabel:'Thảo luận',title:'CÁ
 
 router.get('/create-post', (req,res,next)=>{if(!req.session||!req.session.user){return res.redirect('/login');}next()}, async (req,res) => {
   try {
-    const [cats] = await db.query('SELECT * FROM categories ORDER BY sort_order');
+    const [cats] = await db.query(`
+      SELECT c.*, 
+        (SELECT p.title FROM posts p WHERE p.category_id = c.id ORDER BY p.created_at DESC LIMIT 1) as last_title,
+        (SELECT p.id FROM posts p WHERE p.category_id = c.id ORDER BY p.created_at DESC LIMIT 1) as last_id,
+        (SELECT u.username FROM posts p JOIN users u ON p.user_id=u.id WHERE p.category_id = c.id ORDER BY p.created_at DESC LIMIT 1) as last_author,
+        (SELECT p.created_at FROM posts p WHERE p.category_id = c.id ORDER BY p.created_at DESC LIMIT 1) as last_date
+      FROM categories c ORDER BY c.sort_order
+    `);
     const [chatHistory] = await db.query("SELECT m.*,u.username,u.avatar FROM chat_messages m JOIN users u ON m.user_id=u.id WHERE m.room='nhap-mon' ORDER BY m.created_at DESC LIMIT 20");
     res.render('create-post', { title: 'Đăng Bài Viết — GMSH', cats, user: req.session.user });
   } catch(e) { res.redirect('/forum'); }

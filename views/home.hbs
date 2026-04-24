@@ -33,10 +33,24 @@
       <div style="background:var(--red);color:#fff;padding:8px 12px;font-size:13px;font-weight:700;display:flex;justify-content:space-between;">
         <span>💬 CHAT NHẬP MÔN</span><span style="font-size:11px;opacity:.8">LIVE</span>
       </div>
-      <div id="homeChatBox" style="height:250px;max-height:250px;overflow-y:auto;padding:8px;background:#fafafa;font-size:12px;"></div>
-      <div style="padding:6px;border-top:1px solid #eee;display:flex;gap:6px;">
-        <input id="homeChatInput" type="text" placeholder="Nhắn tin..." style="flex:1;padding:7px 10px;border:1px solid #ddd;border-radius:20px;font-size:12px;outline:none;">
-        <button onclick="sendHomeChat()" style="background:var(--red);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;">➤</button>
+      <div id="homeChatBox" style="height:250px;max-height:250px;overflow-y:auto;padding:8px;background:#fff;font-size:12px;"></div>
+      <div style="padding:4px 6px;border-top:1px solid #eee;">
+        <div style="display:flex;gap:4px;margin-bottom:4px;flex-wrap:wrap;">
+          <button onclick="addEmoji('😀')" style="background:none;border:none;font-size:16px;cursor:pointer;padding:2px;">😀</button>
+          <button onclick="addEmoji('🔥')" style="background:none;border:none;font-size:16px;cursor:pointer;padding:2px;">🔥</button>
+          <button onclick="addEmoji('🎯')" style="background:none;border:none;font-size:16px;cursor:pointer;padding:2px;">🎯</button>
+          <button onclick="addEmoji('💰')" style="background:none;border:none;font-size:16px;cursor:pointer;padding:2px;">💰</button>
+          <button onclick="addEmoji('👍')" style="background:none;border:none;font-size:16px;cursor:pointer;padding:2px;">👍</button>
+          <button onclick="addEmoji('😍')" style="background:none;border:none;font-size:16px;cursor:pointer;padding:2px;">😍</button>
+          <button onclick="addEmoji('🥳')" style="background:none;border:none;font-size:16px;cursor:pointer;padding:2px;">🥳</button>
+          <button onclick="addEmoji('😭')" style="background:none;border:none;font-size:16px;cursor:pointer;padding:2px;">😭</button>
+          <button onclick="addEmoji('💪')" style="background:none;border:none;font-size:16px;cursor:pointer;padding:2px;">💪</button>
+          <button onclick="addEmoji('☕')" style="background:none;border:none;font-size:16px;cursor:pointer;padding:2px;">☕</button>
+        </div>
+        <div style="display:flex;gap:6px;">
+          <input id="homeChatInput" type="text" placeholder="Nhắn tin..." style="flex:1;padding:7px 10px;border:1px solid #ddd;border-radius:20px;font-size:12px;outline:none;">
+          <button onclick="sendHomeChat()" style="background:var(--red);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;">➤</button>
+        </div>
       </div>
     </div>
     <!-- BXH ẩn - chuyển xuống dưới -->
@@ -79,7 +93,14 @@
           </div>
         </td>
         <td style="padding:10px 14px;text-align:center;font-weight:700;color:var(--red);font-size:14px;">{{post_count}}</td>
-        <td style="padding:10px 14px;font-size:12px;color:#888;">— chưa có bài —</td>
+        <td style="padding:10px 14px;font-size:12px;">
+          {{#if last_id}}
+          <a href="/post/{{last_id}}" style="color:#333;font-weight:600;font-size:12px;display:block;margin-bottom:2px;">{{last_title}}</a>
+          <span style="color:#aaa;font-size:11px;">by <a href="/profile/{{last_author}}" style="color:var(--red);">{{last_author}}</a> — {{formatDate last_date}}</span>
+          {{else}}
+          <span style="color:#aaa;">— chưa có bài —</span>
+          {{/if}}
+        </td>
       </tr>
       {{/each}}
     </tbody>
@@ -106,8 +127,8 @@
         <td class="tc"><a href="/profile/{{author}}" class="author-a {{#if (eq author 'ADMIN')}}adm{{/if}}">{{author}}</a></td>
         <td class="tc"><span class="num">{{likes}}</span>👍</td>
         <td class="tc"><span class="num">{{views}}</span></td>
-        <td class="tc"><span class="num">{{replies}}</span></td>
-        <td class="tc" style="font-size:11px;white-space:nowrap;">{{time}}</td>
+        <td class="tc"><span class="num">{{reply_count}}</span></td>
+        <td class="tc" style="font-size:11px;color:#888;"><a href="/profile/{{author}}" style="color:var(--red);font-weight:600;">{{author}}</a><br><span>{{formatDate created_at}}</span></td>
       </tr>
       {{/each}}
     </tbody>
@@ -144,7 +165,7 @@ window.addEventListener('load', function() {
   ];
   history.forEach(function(m) {
     var div = document.createElement('div');
-    div.style.cssText = 'margin-bottom:6px;padding:4px 6px;background:rgba(255,255,255,0.1);border-radius:4px;font-size:11px;color:#ddd;';
+    div.style.cssText = 'margin-bottom:6px;padding:4px 6px;background:#f5f5f5;border-radius:4px;font-size:12px;color:#222;font-weight:600;border-left:2px solid var(--red);';
     div.innerHTML = '<span style="color:#ff6b6b;font-weight:700;">@' + m.username + '</span><br>' + m.message;
     box.appendChild(div);
   });
@@ -159,11 +180,12 @@ window.addEventListener('load', function() {
   s.emit('join', { username: '{{user.username}}' || 'Khách', room: 'nhap-mon' });
   s.on('chat_message', function(d) {
     var div = document.createElement('div');
-    div.style.cssText = 'color:#ddd;margin-bottom:4px;font-size:11px;border-bottom:1px solid #222;padding-bottom:3px;';
+    div.style.cssText = 'color:#222;margin-bottom:4px;font-size:12px;border-bottom:1px solid #eee;padding-bottom:3px;font-weight:600;';
     div.innerHTML = '<span style="color:#e74c3c;font-weight:700;">@' + d.username + '</span> ' + d.message;
     box.appendChild(div);
     box.scrollTop = box.scrollHeight;
   });
+  window.addEmoji = function(e) { var inp = document.getElementById("homeChatInput"); if(inp) inp.value += e; inp.focus(); };
   window.sendMChat = function() {
     var inp = document.getElementById('mobileChatInput');
     if (inp && inp.value.trim()) {
@@ -219,7 +241,8 @@ window.addEventListener('load', function() {
       box2.appendChild(div);
       box2.scrollTop = box2.scrollHeight;
     });
-    window.sendMChat = function() {
+    window.addEmoji = function(e) { var inp = document.getElementById("homeChatInput"); if(inp) inp.value += e; inp.focus(); };
+  window.sendMChat = function() {
       if (minp.value.trim()) {
         s.emit('chat_message', { message: minp.value.trim(), user_id: '{{user.id}}' });
         minp.value = '';
