@@ -83,3 +83,83 @@
     <div style="text-align:center;padding:20px;color:#888;font-size:13px;">Đăng nhập để xem danh sách theo dõi</div>
   </div>
 </div>
+
+<!-- THỐNG KÊ CÁ NHÂN -->
+<div class="card fade-up">
+  <div class="card-head">📊 THỐNG KÊ DỰ ĐOÁN</div>
+  <div style="padding:16px;">
+    <!-- Tổng quan -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px;">
+      <div style="text-align:center;padding:14px;background:#fdecea;border-radius:6px;">
+        <div style="font-size:24px;font-weight:800;color:var(--red);font-family:'Oswald',sans-serif;">{{stats.tong_du_doan}}</div>
+        <div style="font-size:11px;color:#888;margin-top:2px;">Tổng dự đoán</div>
+      </div>
+      <div style="text-align:center;padding:14px;background:#e8f5e9;border-radius:6px;">
+        <div style="font-size:24px;font-weight:800;color:#27ae60;font-family:'Oswald',sans-serif;">{{stats.so_trung}}</div>
+        <div style="font-size:11px;color:#888;margin-top:2px;">Số lần trúng</div>
+      </div>
+      <div style="text-align:center;padding:14px;background:#fff9e6;border-radius:6px;">
+        <div style="font-size:24px;font-weight:800;color:#f39c12;font-family:'Oswald',sans-serif;">{{stats.ty_le}}%</div>
+        <div style="font-size:11px;color:#888;margin-top:2px;">Tỉ lệ trúng</div>
+      </div>
+      <div style="text-align:center;padding:14px;background:#e8f4fd;border-radius:6px;">
+        <div style="font-size:24px;font-weight:800;color:#2980b9;font-family:'Oswald',sans-serif;">{{#if bxhThang}}#{{bxhThang.hang}}{{else}}—{{/if}}</div>
+        <div style="font-size:11px;color:#888;margin-top:2px;">Hạng tháng này</div>
+      </div>
+    </div>
+
+    <!-- Thanh tỉ lệ -->
+    <div style="margin-bottom:16px;">
+      <div style="display:flex;justify-content:space-between;font-size:12px;color:#666;margin-bottom:4px;">
+        <span>Tỉ lệ trúng tổng thể</span>
+        <span style="font-weight:700;color:var(--red);">{{stats.ty_le}}%</span>
+      </div>
+      <div style="height:10px;background:#eee;border-radius:5px;overflow:hidden;">
+        <div style="height:100%;background:linear-gradient(90deg,#c0392b,#e74c3c);border-radius:5px;width:{{stats.ty_le}}%;transition:width 1s;"></div>
+      </div>
+    </div>
+
+    <!-- Thống kê theo loại -->
+    {{#if predByType.length}}
+    <div style="margin-bottom:16px;">
+      <div style="font-size:13px;font-weight:700;color:#444;margin-bottom:8px;">Theo loại dự đoán:</div>
+      {{#each predByType}}
+      <div style="margin-bottom:8px;">
+        <div style="display:flex;justify-content:space-between;font-size:12px;color:#666;margin-bottom:3px;">
+          <span>{{loai}} ({{tong}} lần)</span>
+          <span style="font-weight:700;">{{trung}}/{{tong}} trúng</span>
+        </div>
+        <div style="height:7px;background:#eee;border-radius:4px;overflow:hidden;">
+          <div style="height:100%;background:var(--red);border-radius:4px;width:{{trung}}%;"></div>
+        </div>
+      </div>
+      {{/each}}
+    </div>
+    {{/if}}
+
+    <!-- Biểu đồ 7 ngày -->
+    <div>
+      <div style="font-size:13px;font-weight:700;color:#444;margin-bottom:8px;">Lịch sử 7 ngày qua:</div>
+      <canvas id="chartPred" height="80"></canvas>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3/dist/chart.min.js"></script>
+<script>
+const predHistory = {{{predHistory}}};
+if (predHistory.length) {
+  const ctx = document.getElementById('chartPred').getContext('2d');
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: predHistory.map(d => d.ngay),
+      datasets: [
+        { label: 'Tổng', data: predHistory.map(d => d.tong), backgroundColor: '#eee' },
+        { label: 'Trúng', data: predHistory.map(d => d.trung), backgroundColor: '#c0392b' }
+      ]
+    },
+    options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+  });
+}
+</script>
