@@ -1,0 +1,98 @@
+<div class="breadcrumb">
+  <a href="/home">Trang chủ</a><span class="sep">›</span>
+  <a href="/forum">Diễn đàn</a><span class="sep">›</span>
+  <span>Đăng bài viết mới</span>
+</div>
+
+{{#if error}}
+<div class="alert alert-error">❌ {{error}}</div>
+{{/if}}
+
+<div class="card fade-up">
+  <div class="card-head">✍️ ĐĂNG BÀI VIẾT MỚI</div>
+  <div style="padding:20px;">
+    <form action="/create-post" method="POST">
+
+      <div class="form-group" style="margin-bottom:14px;">
+        <label style="font-size:13px;font-weight:600;color:#444;display:block;margin-bottom:5px;">
+          Tiêu đề bài viết <span style="color:var(--red)">*</span>
+        </label>
+        <input type="text" name="title" required
+          style="width:100%;padding:10px 14px;border:1px solid #ddd;border-radius:4px;font-size:14px;outline:none;"
+          placeholder="Nhập tiêu đề bài viết...">
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
+        <div class="form-group">
+          <label style="font-size:13px;font-weight:600;color:#444;display:block;margin-bottom:5px;">
+            Danh mục <span style="color:var(--red)">*</span>
+          </label>
+          <select name="category_id" required
+            style="width:100%;padding:10px 12px;border:1px solid #ddd;border-radius:4px;font-size:13px;outline:none;">
+            <option value="">-- Chọn danh mục --</option>
+            {{#each cats}}
+            <option value="{{id}}">{{icon}} {{name}}</option>
+            {{/each}}
+          </select>
+        </div>
+        <div class="form-group">
+          <label style="font-size:13px;font-weight:600;color:#444;display:block;margin-bottom:5px;">Tag</label>
+          <select name="tag"
+            style="width:100%;padding:10px 12px;border:1px solid #ddd;border-radius:4px;font-size:13px;outline:none;">
+            <option value="tl">Thảo luận</option>
+            <option value="mb">Cầu MB</option>
+            <option value="de36">Đề 36S</option>
+            <option value="bc">Bắt chốt</option>
+            <option value="k2n">Lô K2N</option>
+            <option value="ht">Huyền Thoại</option>
+            <option value="vip">VIP</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group" style="margin-bottom:14px;">
+        <label style="font-size:13px;font-weight:600;color:#444;display:block;margin-bottom:5px;">
+          Nội dung <span style="color:var(--red)">*</span>
+        </label>
+        <div style="border:1px solid #ddd;border-radius:4px;overflow:hidden;">
+          <div style="background:#f5f5f5;padding:6px 10px;border-bottom:1px solid #eee;display:flex;gap:6px;flex-wrap:wrap;">
+            <button type="button" onclick="fmt('bold')" style="padding:3px 10px;border:1px solid #ddd;border-radius:3px;background:#fff;font-weight:700;cursor:pointer;">B</button>
+            <button type="button" onclick="fmt('italic')" style="padding:3px 10px;border:1px solid #ddd;border-radius:3px;background:#fff;font-style:italic;cursor:pointer;">I</button>
+            <button type="button" onclick="fmt('underline')" style="padding:3px 10px;border:1px solid #ddd;border-radius:3px;background:#fff;text-decoration:underline;cursor:pointer;">U</button>
+            <button type="button" onclick="insertNum()" style="padding:3px 10px;border:1px solid #ddd;border-radius:3px;background:#c0392b;color:#fff;font-weight:700;cursor:pointer;">🔴 Số</button>
+          </div>
+          <div id="editor" contenteditable="true"
+            style="min-height:200px;padding:12px;font-size:14px;outline:none;line-height:1.8;"
+            placeholder="Nhập nội dung bài viết..."></div>
+        </div>
+        <input type="hidden" name="content" id="contentInput">
+      </div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <a href="/forum" style="color:#888;font-size:13px;">← Hủy bỏ</a>
+        <button type="submit" class="btn btn-red" onclick="submitPost()">
+          📝 Đăng bài viết
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+<script>
+function fmt(cmd) {
+  document.execCommand(cmd, false, null);
+  document.getElementById('editor').focus();
+}
+function insertNum() {
+  const num = prompt('Nhập số (vd: 27):');
+  if (num) {
+    document.execCommand('insertHTML', false,
+      `<span style="background:#c0392b;color:#fff;font-weight:800;padding:1px 6px;border-radius:3px;font-size:13px;">${num}</span>`);
+  }
+}
+function submitPost() {
+  document.getElementById('contentInput').value =
+    document.getElementById('editor').innerHTML;
+}
+</script>

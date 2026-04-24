@@ -1,43 +1,101 @@
-const express = require('express');
-const path    = require('path');
-const app     = express();
-const PORT    = process.env.PORT || 3000;
+const express  = require('express');
+const path     = require('path');
+const session  = require('express-session');
+const http     = require('http');
+const { Server } = require('socket.io');
+const MySQLStore = require('express-mysql-session')(session);
+const app      = express();
+const server   = http.createServer(app);
+const io       = new Server(server);
+const PORT     = process.env.PORT || 3000;
+require('dotenv').config();
 
-// ── Static files (CSS, JS, images) ─────────────────────────────
 app.use('/public', express.static(path.join(__dirname, 'public')));
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
-// ── Template engine (Handlebars) ───────────────────────────────
+// Session store MySQL
+const sessionStore = new MySQLStore({
+  host:     process.env.DB_HOST || 'localhost',
+  port:     3306,
+  user:     process.env.DB_USER || 'gmsh',
+  password: process.env.DB_PASS || 'Gmsh@2026',
+  database: process.env.DB_NAME || 'diendansohoc',
+  clearExpired: true,
+  checkExpirationInterval: 900000,
+  expiration: 7 * 24 * 60 * 60 * 1000,
+});
+
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'gmsh_secret_2026',
+  resave: false,
+  saveUninitialized: false,
+  store: sessionStore,
+  cookie: { maxAge: 7 * 24 * 60 * 60 * 1000, httpOnly: true, sameSite: "lax", secure: true }
+}));
+
 const { engine } = require('express-handlebars');
 app.engine('hbs', engine({
   extname: '.hbs',
   defaultLayout: 'main',
-  layoutsDir:   path.join(__dirname, 'views/layouts'),
-  partialsDir:  path.join(__dirname, 'views/partials'),
+  layoutsDir:  path.join(__dirname, 'views/layouts'),
+  partialsDir: path.join(__dirname, 'views/partials'),
+  helpers: {
+    eq:  (a, b) => a === b,
+    neq: (a, b) => a !== b,
+    gt:  (a, b) => a > b,
+    lt:  (a, b) => a < b,
+    arr: (...args) => args.slice(0, -1),
+  }
 }));
 app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname, 'views'));
 
-// ── Routes ─────────────────────────────────────────────────────
 app.use('/', require('./routes/index'));
 
-// ── 404 ────────────────────────────────────────────────────────
 app.use((req, res) => {
   res.status(404).render('404', { title: 'Không tìm thấy trang' });
 });
 
-app.listen(PORT, () => {
-  console.log(`\n✅ GMSH Diễn Đàn chạy tại: http://localhost:${PORT}`);
-  console.log(`   /home       → http://localhost:${PORT}/home`);
-  console.log(`   /login      → http://localhost:${PORT}/login`);
-  console.log(`   /register   → http://localhost:${PORT}/register`);
-  console.log(`   /forum      → http://localhost:${PORT}/forum`);
-  console.log(`   /post/:id   → http://localhost:${PORT}/post/1`);
-  console.log(`   /profile    → http://localhost:${PORT}/profile`);
-  console.log(`   /kqxs       → http://localhost:${PORT}/kqxs`);
-  console.log(`   /soi-cau    → http://localhost:${PORT}/soi-cau`);
-  console.log(`   /cao-thu    → http://localhost:${PORT}/cao-thu`);
-  console.log(`   /chat       → http://localhost:${PORT}/chat`);
-  console.log(`   /tools      → http://localhost:${PORT}/tools`);
-  console.log(`   /search     → http://localhost:${PORT}/search`);
-  console.log(`   /admin      → http://localhost:${PORT}/admin\n`);
+// Socket.io
+const db = require('./db');
+const online = {};
+io.on('connection', (socket) => {
+  socket.on('join', (data) => {
+    socket.username = data.username || 'Khách';
+    socket.room = data.room || 'nhap-mon';
+    socket.join(socket.room);
+    online[socket.id] = { username: socket.username, room: socket.room };
+    io.to(socket.room).emit('online_count',
+      Object.values(online).filter(u => u.room === socket.room).length);
+  });
+  socket.on('chat_message', async (data) => {
+    if (!data.message || !data.message.trim()) return;
+    const msg = {
+      username: socket.username,
+      message: data.message.trim().substring(0, 500),
+      time: new Date().toTimeString().slice(0,5),
+      room: socket.room,
+    };
+    try {
+      if (data.user_id) {
+        await db.query('INSERT INTO chat_messages (user_id, room, message) VALUES (?,?,?)',
+          [data.user_id, socket.room, msg.message]);
+      }
+    } catch(e) {}
+    io.to(socket.room).emit('chat_message', msg);
+  });
+  socket.on('disconnect', () => {
+    delete online[socket.id];
+    if (socket.room) {
+      io.to(socket.room).emit('online_count',
+        Object.values(online).filter(u => u.room === socket.room).length);
+    }
+  });
+});
+
+require('./kqxs-auto');
+
+server.listen(PORT, () => {
+  console.log(`✅ GMSH + Socket.io chạy tại: http://localhost:${PORT}`);
 });

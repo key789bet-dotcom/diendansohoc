@@ -1,0 +1,99 @@
+<div class="breadcrumb">
+  <a href="/home">Trang chủ</a><span class="sep">›</span>
+  <span>Dự đoán hôm nay</span>
+</div>
+
+{{#if success}}<div class="alert alert-success auto-hide">✅ {{success}}</div>{{/if}}
+{{#if error}}<div class="alert alert-error auto-hide">❌ {{error}}</div>{{/if}}
+
+<div class="card fade-up">
+  <div class="card-head">🎯 CHỐT SỐ DỰ ĐOÁN — {{today}}</div>
+  <div style="padding:16px;">
+    {{#if user}}
+    <form action="/du-doan" method="POST" style="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:10px;align-items:end;">
+      <div>
+        <label style="font-size:12px;font-weight:600;color:#444;display:block;margin-bottom:4px;">Số dự đoán</label>
+        <input type="text" name="so_du_doan" placeholder="VD: 28" maxlength="3" required
+          style="width:100%;padding:9px 12px;border:1px solid #ddd;border-radius:4px;font-size:16px;font-weight:700;text-align:center;outline:none;">
+      </div>
+      <div>
+        <label style="font-size:12px;font-weight:600;color:#444;display:block;margin-bottom:4px;">Loại</label>
+        <select name="loai" style="width:100%;padding:9px 12px;border:1px solid #ddd;border-radius:4px;font-size:13px;outline:none;">
+          <option value="lo">Lô (2 số)</option>
+          <option value="de">Đề (2 số)</option>
+          <option value="bacang">Ba càng (3 số)</option>
+        </select>
+      </div>
+      <div>
+        <label style="font-size:12px;font-weight:600;color:#444;display:block;margin-bottom:4px;">Vùng</label>
+        <select name="region" style="width:100%;padding:9px 12px;border:1px solid #ddd;border-radius:4px;font-size:13px;outline:none;">
+          <option value="mb">Miền Bắc</option>
+          <option value="mn">Miền Nam</option>
+          <option value="mt">Miền Trung</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-red" style="padding:9px 20px;">🎯 Chốt số</button>
+    </form>
+    {{else}}
+    <div class="alert alert-warn">💡 Vui lòng <a href="/login" style="color:var(--red);font-weight:700;">đăng nhập</a> để chốt số dự đoán!</div>
+    {{/if}}
+  </div>
+</div>
+
+<!-- Dự đoán của tôi hôm nay -->
+{{#if user}}
+<div class="card fade-up">
+  <div class="card-head">📋 DỰ ĐOÁN CỦA TÔI HÔM NAY</div>
+  {{#if myPreds.length}}
+  <table class="ftable">
+    <thead><tr><th>Số</th><th>Loại</th><th>Vùng</th><th>Kết quả</th><th>Điểm</th><th></th></tr></thead>
+    <tbody>
+      {{#each myPreds}}
+      <tr>
+        <td style="text-align:center;"><span style="background:#c0392b;color:#fff;font-weight:800;padding:4px 10px;border-radius:4px;font-family:'Oswald',sans-serif;font-size:16px;">{{so_du_doan}}</span></td>
+        <td class="tc">{{loai}}</td>
+        <td class="tc">{{region}}</td>
+        <td class="tc">
+          {{#if (eq ket_qua 'trung')}}<span style="background:#e8f5e9;color:#27ae60;padding:3px 10px;border-radius:10px;font-weight:700;font-size:12px;">✅ TRÚNG</span>
+          {{else if (eq ket_qua 'thua')}}<span style="background:#fdecea;color:#e74c3c;padding:3px 10px;border-radius:10px;font-weight:700;font-size:12px;">❌ Thua</span>
+          {{else}}<span style="background:#fff9e6;color:#f39c12;padding:3px 10px;border-radius:10px;font-weight:700;font-size:12px;">⏳ Chờ KQ</span>{{/if}}
+        </td>
+        <td class="tc" style="font-weight:700;color:var(--red);">{{diem_thuong}}</td>
+        <td class="tc"><form action="/du-doan/{{id}}/delete" method="POST"><button type="submit" style="background:none;border:none;color:#e74c3c;cursor:pointer;font-size:18px;" title="Xóa">🗑️</button></form></td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+  {{else}}
+  <div style="padding:20px;text-align:center;color:#888;">Bạn chưa chốt số hôm nay. Hãy chốt ngay!</div>
+  {{/if}}
+</div>
+{{/if}}
+
+<!-- Bảng dự đoán cộng đồng -->
+<div class="card fade-up">
+  <div class="card-head">👥 DỰ ĐOÁN CỘNG ĐỒNG HÔM NAY <span style="font-size:12px;font-weight:400;color:rgba(255,255,255,.7)">({{totalPreds}} lượt chốt)</span></div>
+  {{#if allPreds.length}}
+  <table class="ftable">
+    <thead><tr><th>Cao thủ</th><th>Số</th><th>Loại</th><th>Vùng</th><th>Kết quả</th><th>Giờ chốt</th></tr></thead>
+    <tbody>
+      {{#each allPreds}}
+      <tr>
+        <td><a href="/profile/{{username}}" class="author-a">{{username}}</a></td>
+        <td style="text-align:center;"><span style="background:#c0392b;color:#fff;font-weight:800;padding:3px 8px;border-radius:4px;font-family:'Oswald',sans-serif;">{{so_du_doan}}</span></td>
+        <td class="tc" style="font-size:12px;">{{loai}}</td>
+        <td class="tc" style="font-size:12px;">{{region}}</td>
+        <td class="tc">
+          {{#if (eq ket_qua 'trung')}}<span style="color:#27ae60;font-weight:700;">✅</span>
+          {{else if (eq ket_qua 'thua')}}<span style="color:#e74c3c;">❌</span>
+          {{else}}<span style="color:#f39c12;">⏳</span>{{/if}}
+        </td>
+        <td class="tc" style="font-size:11px;color:#888;">{{created_at}}</td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+  {{else}}
+  <div style="padding:20px;text-align:center;color:#888;">Chưa có ai chốt số hôm nay!</div>
+  {{/if}}
+</div>

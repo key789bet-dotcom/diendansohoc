@@ -215,3 +215,105 @@ input,textarea,select,button { font-family:inherit; }
   .logo-name { font-size:17px; }
   .footer-grid { grid-template-columns:1fr; }
 }
+
+/* ── MOBILE OPTIMIZATION ─────────────────────────────────────────────── */
+@media (max-width:920px) {
+  /* Header */
+  .logo-name { font-size:16px !important; }
+  .logo-sub  { display:none; }
+  .header-right .btn { padding:6px 10px; font-size:12px; }
+
+  /* Nav mobile scroll */
+  .site-nav .inner { gap:0; }
+  .nav-link { padding:0 10px; font-size:12px; }
+
+  /* Page layout */
+  .page-wrap { grid-template-columns:1fr; padding:0 10px; }
+  .page-full { padding:0 10px; }
+
+  /* Forum table */
+  .ftable th:nth-child(3),
+  .ftable th:nth-child(4),
+  .ftable th:nth-child(6),
+  .ftable td:nth-child(3),
+  .ftable td:nth-child(4),
+  .ftable td:nth-child(6) { display:none; }
+
+  /* Post */
+  .post-body { grid-template-columns:1fr !important; }
+  .post-user { display:flex; align-items:center; gap:10px; padding:10px; border-right:none; border-bottom:1px solid #eee; }
+
+  /* Cards */
+  .card-head { font-size:13px; }
+
+  /* Footer */
+  .footer-grid { grid-template-columns:1fr 1fr; gap:16px; }
+
+  /* Stats */
+  .stat-grid { grid-template-columns:1fr 1fr; }
+}
+
+@media (max-width:600px) {
+  /* Logo */
+  .logo-badge { width:38px; height:38px; font-size:13px; }
+  .logo-name  { font-size:14px !important; }
+
+  /* Header buttons */
+  .btn-outline { display:none; }
+  .btn-gold { padding:6px 10px; font-size:12px; }
+
+  /* Nav */
+  .nav-link { padding:0 8px; font-size:11px; }
+  .nav-badge { display:none; }
+
+  /* Ticker */
+  .ticker-label { font-size:10px; padding:2px 6px; }
+  .ticker-text  { font-size:12px; }
+
+  /* Forum table - chỉ giữ tiêu đề và tác giả */
+  .ftable th:nth-child(5),
+  .ftable td:nth-child(5) { display:none; }
+
+  /* Featured grid */
+  .featured-grid { grid-template-columns:1fr !important; }
+
+  /* Footer */
+  .footer-grid { grid-template-columns:1fr; }
+  .footer-grid div:nth-child(3),
+  .footer-grid div:nth-child(4) { display:none; }
+
+  /* Breadcrumb */
+  .breadcrumb { font-size:11px; }
+
+  /* Pagination */
+  .pagi a { padding:4px 8px; font-size:12px; }
+
+  /* Create post */
+  .form-row { grid-template-columns:1fr !important; }
+}
+
+/* ── MOBILE NAV HAMBURGER ──────────────────────────────────────────── */
+@media (max-width:480px) {
+  .site-header .inner { padding:8px 10px; }
+  .logo-badge { width:34px; height:34px; font-size:12px; }
+
+  /* Ẩn text logo trên mobile rất nhỏ */
+  .logo-sub { display:none; }
+
+  /* Chat page */
+  .chat-layout { grid-template-columns:1fr !important; }
+
+  /* Admin */
+  .admin-stats { grid-template-columns:1fr 1fr !important; }
+}
+
+/* ── TOUCH FRIENDLY ───────────────────────────────────────────────── */
+@media (hover:none) {
+  .btn, .nav-link, .act-btn, .f-btn {
+    min-height:44px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .nav-link { min-height:var(--nav-h); }
+}

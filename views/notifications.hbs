@@ -1,0 +1,39 @@
+<div class="breadcrumb">
+  <a href="/home">Trang chủ</a><span class="sep">›</span>
+  <span>Thông báo</span>
+</div>
+
+<div class="card fade-up">
+  <div class="card-head">🔔 THÔNG BÁO CỦA BẠN</div>
+  {{#if notifs.length}}
+  <div>
+    {{#each notifs}}
+    <div style="padding:12px 14px;border-bottom:1px solid #f0f0f0;display:flex;align-items:flex-start;gap:12px;{{#unless is_read}}background:#fff9e6;{{/unless}}">
+      <div style="width:38px;height:38px;border-radius:50%;background:var(--red);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Oswald',sans-serif;font-size:14px;font-weight:700;flex-shrink:0;">
+        {{from_username.[0]}}
+      </div>
+      <div style="flex:1;">
+        <div style="font-size:13px;color:#333;line-height:1.5;">
+          <a href="/profile/{{from_username}}" style="color:var(--red);font-weight:700;">{{from_username}}</a>
+          {{#if (eq type 'comment')}} đã bình luận bài viết của bạn{{/if}}
+          {{#if (eq type 'like')}} đã thích bài viết của bạn{{/if}}
+        </div>
+        <div style="font-size:12px;margin-top:3px;">
+          <a href="/post/{{post_id}}" style="color:var(--blue);font-weight:600;">📝 {{post_title}}</a>
+        </div>
+        <div style="font-size:11px;color:#aaa;margin-top:2px;">{{created_at}}</div>
+      </div>
+      {{#unless is_read}}
+      <span style="background:var(--red);color:#fff;font-size:10px;padding:2px 7px;border-radius:10px;font-weight:700;flex-shrink:0;">MỚI</span>
+      {{/unless}}
+    </div>
+    {{/each}}
+  </div>
+  {{else}}
+  <div style="padding:40px;text-align:center;color:#888;">
+    <div style="font-size:40px;margin-bottom:12px;">🔔</div>
+    <div style="font-size:15px;font-weight:600;">Chưa có thông báo nào</div>
+    <div style="font-size:13px;margin-top:6px;">Khi có người bình luận bài viết của bạn, thông báo sẽ hiện ở đây</div>
+  </div>
+  {{/if}}
+</div>

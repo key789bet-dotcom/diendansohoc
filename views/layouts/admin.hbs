@@ -1,3 +1,4 @@
+cat > /var/www/diendansohoc/views/layouts/admin.hbs << 'EOF'
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -6,16 +7,12 @@
 <title>{{title}}</title>
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/public/css/global.css">
+<link rel="stylesheet" href="/public/css/admin.css">
 </head>
-<body>
-{{> topbar}}
-{{> header}}
-{{> navbar}}
-{{> ticker}}
-<div class="page-full">
-  {{{body}}}
-</div>
-{{> footer}}
+<body class="admin-body">
+{{{body}}}
 <script src="/public/js/global.js"></script>
 </body>
 </html>
+EOF
+pm2 restart gmsh

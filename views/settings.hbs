@@ -1,0 +1,92 @@
+<div class="breadcrumb">
+  <a href="/home">Trang chủ</a><span class="sep">›</span>
+  <a href="/profile/{{user.username}}">{{user.username}}</a><span class="sep">›</span>
+  <span>Cài đặt tài khoản</span>
+</div>
+
+{{#if success}}
+<div class="alert alert-success">✅ {{success}}</div>
+{{/if}}
+{{#if error}}
+<div class="alert alert-error">❌ {{error}}</div>
+{{/if}}
+
+<div class="card fade-up">
+  <div class="card-head">⚙️ CÀI ĐẶT TÀI KHOẢN</div>
+  <div style="padding:20px;">
+
+    <!-- Thông tin cá nhân -->
+    <div style="text-align:center;margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid #eee;">
+      <div style="position:relative;display:inline-block;">
+        {{#if profile.avatar}}
+        <img src="{{profile.avatar}}" style="width:90px;height:90px;border-radius:50%;object-fit:cover;border:3px solid var(--red);">
+        {{else}}
+        <div style="width:90px;height:90px;border-radius:50%;background:var(--red);color:#fff;font-family:Oswald,sans-serif;font-size:32px;font-weight:700;display:flex;align-items:center;justify-content:center;margin:0 auto;">{{profile.username.[0]}}</div>
+        {{/if}}
+      </div>
+      <div style="margin-top:10px;">
+        <form action="/settings/avatar" method="POST" enctype="multipart/form-data" style="display:flex;gap:8px;justify-content:center;align-items:center;">
+          <input type="file" name="avatar" accept="image/*" style="font-size:12px;" required>
+          <button type="submit" class="btn btn-red" style="font-size:12px;padding:6px 14px;">📷 Đổi ảnh</button>
+        </form>
+      </div>
+    </div>
+    <h3 style="font-size:15px;font-weight:700;color:var(--red);margin-bottom:14px;border-left:3px solid var(--red);padding-left:8px;">👤 Thông tin cá nhân</h3>
+    <form action="/settings/profile" method="POST">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+        <div>
+          <label style="font-size:13px;font-weight:600;color:#444;display:block;margin-bottom:5px;">Họ tên</label>
+          <input type="text" name="ho_ten" value="{{profile.ho_ten}}"
+            style="width:100%;padding:9px 12px;border:1px solid #ddd;border-radius:4px;font-size:13px;outline:none;">
+        </div>
+        <div>
+          <label style="font-size:13px;font-weight:600;color:#444;display:block;margin-bottom:5px;">Số điện thoại</label>
+          <input type="tel" name="phone" value="{{profile.phone}}"
+            style="width:100%;padding:9px 12px;border:1px solid #ddd;border-radius:4px;font-size:13px;outline:none;">
+        </div>
+      </div>
+      <div style="margin-bottom:12px;">
+        <label style="font-size:13px;font-weight:600;color:#444;display:block;margin-bottom:5px;">Email</label>
+        <input type="email" name="email" value="{{profile.email}}"
+          style="width:100%;padding:9px 12px;border:1px solid #ddd;border-radius:4px;font-size:13px;outline:none;">
+      </div>
+      <div style="margin-bottom:16px;">
+        <label style="font-size:13px;font-weight:600;color:#444;display:block;margin-bottom:5px;">Vùng chơi</label>
+        <select name="region" style="width:100%;padding:9px 12px;border:1px solid #ddd;border-radius:4px;font-size:13px;outline:none;">
+          <option value="mb" {{#if (eq profile.region 'mb')}}selected{{/if}}>Miền Bắc</option>
+          <option value="mn" {{#if (eq profile.region 'mn')}}selected{{/if}}>Miền Nam</option>
+          <option value="mt" {{#if (eq profile.region 'mt')}}selected{{/if}}>Miền Trung</option>
+          <option value="all" {{#if (eq profile.region 'all')}}selected{{/if}}>Cả 3 miền</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-red">💾 Lưu thông tin</button>
+    </form>
+
+    <hr style="margin:24px 0;border-color:#eee;">
+
+    <!-- Đổi mật khẩu -->
+    <h3 style="font-size:15px;font-weight:700;color:var(--red);margin-bottom:14px;border-left:3px solid var(--red);padding-left:8px;">🔒 Đổi mật khẩu</h3>
+    <form action="/settings/password" method="POST">
+      <div style="margin-bottom:12px;">
+        <label style="font-size:13px;font-weight:600;color:#444;display:block;margin-bottom:5px;">Mật khẩu hiện tại</label>
+        <input type="password" name="old_password" required
+          style="width:100%;padding:9px 12px;border:1px solid #ddd;border-radius:4px;font-size:13px;outline:none;">
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+        <div>
+          <label style="font-size:13px;font-weight:600;color:#444;display:block;margin-bottom:5px;">Mật khẩu mới</label>
+          <input type="password" name="new_password" required
+            style="width:100%;padding:9px 12px;border:1px solid #ddd;border-radius:4px;font-size:13px;outline:none;">
+        </div>
+        <div>
+          <label style="font-size:13px;font-weight:600;color:#444;display:block;margin-bottom:5px;">Xác nhận mật khẩu mới</label>
+          <input type="password" name="confirm_password" required
+            style="width:100%;padding:9px 12px;border:1px solid #ddd;border-radius:4px;font-size:13px;outline:none;">
+        </div>
+      </div>
+      <button type="submit" class="btn btn-red">🔒 Đổi mật khẩu</button>
+    </form>
+
+  </div>
+</div>
+

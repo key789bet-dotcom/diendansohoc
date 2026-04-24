@@ -1,29 +1,20 @@
 <style>
-.post-box{background:#fff;border:1px solid var(--border);border-radius:4px;margin-bottom:8px;overflow:hidden;}
-.post-hd{background:#f7f7f7;border-bottom:1px solid #eee;padding:9px 14px;display:flex;justify-content:space-between;align-items:center;font-size:12px;color:#888;}
-.post-num{background:var(--red);color:#fff;font-size:11px;padding:2px 8px;border-radius:3px;font-weight:700;}
-.post-body{display:grid;grid-template-columns:150px 1fr;}
-.post-user{padding:12px 10px;border-right:1px solid #eee;text-align:center;background:#fafafa;}
-.ava{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Oswald',sans-serif;font-size:18px;font-weight:700;color:#fff;margin:0 auto 6px;}
-.uname{font-weight:700;font-size:13px;color:var(--red);}
-.urank{font-size:10px;color:#888;}
-.ubadge{display:inline-block;background:var(--gold);color:#fff;font-size:10px;padding:1px 6px;border-radius:3px;font-weight:700;margin-top:3px;}
-.ustats{font-size:10px;color:#aaa;margin-top:7px;line-height:1.9;}
-.post-content{padding:12px 16px;font-size:14px;line-height:1.8;color:#333;}
-.post-content p{margin-bottom:10px;}
-.num-tag{background:#c0392b;color:#fff;font-weight:800;padding:1px 5px;border-radius:3px;font-size:13px;}
-.num-table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13px;}
-.num-table th{background:var(--red);color:#fff;padding:6px 10px;}
-.num-table td{padding:6px 10px;border:1px solid #eee;text-align:center;}
-.num-table tr:nth-child(even) td{background:#fafafa;}
+.post-box{background:#fff;border:1px solid var(--border);border-radius:4px;margin-bottom:10px;}
+.post-hd{padding:8px 14px;background:#f8f8f8;border-bottom:1px solid #eee;display:flex;align-items:center;gap:8px;font-size:12px;color:#888;}
+.post-body{display:grid;grid-template-columns:120px 1fr;}
+.post-user{padding:14px 10px;border-right:1px solid #eee;text-align:center;}
+.ava{width:52px;height:52px;border-radius:50%;background:var(--red);color:#fff;font-family:'Oswald',sans-serif;font-size:18px;font-weight:700;display:flex;align-items:center;justify-content:center;margin:0 auto 6px;}
+.uname a{font-weight:700;font-size:13px;color:var(--red);}
+.urank{font-size:11px;color:#888;margin:2px 0;}
+.ubadge{font-size:11px;padding:1px 6px;border-radius:8px;background:#fdecea;color:var(--red);font-weight:700;margin:2px 0;}
+.ustats{font-size:10px;color:#aaa;margin-top:4px;line-height:1.6;}
+.post-content{padding:14px;font-size:14px;line-height:1.8;color:#333;}
 .post-acts{padding:9px 14px;border-top:1px solid #eee;background:#fafafa;display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
-.act-btn{padding:5px 12px;border-radius:3px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid #ddd;background:#fff;color:#555;transition:all .15s;}
-.act-btn:hover{background:#f0f0f0;}
-.act-btn.liked{background:#fdecea;color:var(--red);border-color:#f5c6c0;}
-.reply-form{background:#fff;border:1px solid var(--border);border-radius:4px;padding:14px;margin-bottom:10px;}
-.reply-form h3{font-size:14px;font-weight:700;color:var(--red);margin-bottom:10px;border-left:3px solid var(--red);padding-left:8px;}
-.reply-ta{width:100%;min-height:90px;padding:10px;border:1px solid #ddd;border-radius:4px;font-size:13px;font-family:inherit;resize:vertical;outline:none;}
-.reply-ta:focus{border-color:var(--red);}
+.act-btn{background:none;border:1px solid #ddd;border-radius:4px;padding:4px 12px;font-size:12px;cursor:pointer;color:#555;}
+.act-btn:hover{background:#fdecea;border-color:var(--red);color:var(--red);}
+.reply-box{background:#f5f5f5;border-left:3px solid var(--red);margin:0 14px 10px 130px;padding:10px;border-radius:0 4px 4px 0;}
+.reply-form-box{display:none;background:#fff9e6;border-left:3px solid #f39c12;margin:0 14px 10px 130px;padding:10px;border-radius:0 4px 4px 0;}
+.num-tag{background:#c0392b;color:#fff;font-weight:800;padding:1px 5px;border-radius:3px;font-size:12px;}
 </style>
 
 <div class="breadcrumb">
@@ -32,113 +23,123 @@
   <span>{{post.title}}</span>
 </div>
 
-<div class="card fade-up" style="margin-bottom:8px;">
-  <div class="card-head">
-    <span><span class="tag tag-{{post.tag}}">{{post.tagLabel}}</span> {{post.title}}</span>
-    <span style="font-size:11px;color:rgba(255,255,255,.7)">👁 {{post.views}} views</span>
-  </div>
-</div>
-
-<!-- BÀI GỐC -->
+<!-- BÀI VIẾT CHÍNH -->
 <div class="post-box fade-up">
   <div class="post-hd">
-    <span><span class="post-num">#1</span> <span style="margin-left:6px">Bài gốc</span></span>
-    <span>23/04/2026 — 08:12</span>
+    <span class="tag-badge {{post.tag}}">{{post.tagLabel}}</span>
+    <span>{{post.title}}</span>
+    <span style="margin-left:auto;">👁 {{post.views}} lượt xem</span>
   </div>
   <div class="post-body">
     <div class="post-user">
-      <div class="ava" style="background:var(--red)">{{post.author}}</div>
+      {{#if post.avatar}}
+      <img src="{{post.avatar}}" class="ava" style="object-fit:cover;">
+      {{else}}
+      <div class="ava">{{post.author.[0]}}</div>
+      {{/if}}
       <div class="uname"><a href="/profile/{{post.author}}">{{post.author}}</a></div>
-      <div class="urank">Cao thủ</div>
-      <div class="ubadge">⭐ VIP</div>
-      <div class="ustats">Bài viết: 2,341<br>Tham gia: 2021<br>Điểm: 847</div>
+      <div class="urank">{{post.user_rank}}</div>
     </div>
-    <div class="post-content">
-      <p>Chào anh em diễn đàn GMSH! Hôm nay mình share dàn số <strong>CÁI BANG THỐNG NHẤT THIÊN HẠ</strong> — bộ 2,3,4D đã được test kỹ trong tháng 4/2026.</p>
-      <p>📌 <strong>Phương pháp:</strong> Dựa trên thống kê chu kỳ lô gan, kết hợp phân tích đầu đuôi 30 ngày gần nhất. Tỉ lệ trúng đạt <strong style="color:var(--red)">73%</strong> trong 3 tháng test.</p>
-      <table class="num-table">
-        <thead><tr><th>STT</th><th>2D Lô/Đề</th><th>3D Ba Càng</th><th>Ghi chú</th></tr></thead>
-        <tbody>
-          <tr><td>1</td><td><span class="num-tag">27</span> — <span class="num-tag">72</span></td><td><span class="num-tag">274</span></td><td>Đuôi 7 mạnh</td></tr>
-          <tr><td>2</td><td><span class="num-tag">38</span> — <span class="num-tag">83</span></td><td><span class="num-tag">382</span></td><td>Đầu 3 chu kỳ</td></tr>
-          <tr><td>3</td><td><span class="num-tag">56</span> — <span class="num-tag">65</span></td><td><span class="num-tag">562</span></td><td>Cầu chẵn</td></tr>
-          <tr><td>4</td><td><span class="num-tag">91</span> — <span class="num-tag">19</span></td><td><span class="num-tag">918</span></td><td>Kép lẻ</td></tr>
-        </tbody>
-      </table>
-      <p>⚠️ <strong>Lưu ý:</strong> Anh em chỉ nên đặt vốn vừa phải, tối đa 20% tổng vốn. Nuôi 3 ngày liên tục mới đánh giá được hiệu quả. 💪</p>
-    </div>
+    <div class="post-content">{{{post.content}}}</div>
   </div>
   <div class="post-acts">
-    <button class="act-btn liked" id="likeBtn" onclick="toggleLike()">👍 Thích <span id="likeNum">{{post.likes}}</span></button>
-    <button class="act-btn">💬 Trả lời</button>
+    <button class="act-btn" onclick="likePost(this,{{post.id}})">👍 Thích <span id="likeNum">{{post.likes}}</span></button>
     <button class="act-btn">🔖 Lưu</button>
     <button class="act-btn">⚠️ Báo cáo</button>
     <span style="margin-left:auto;font-size:11px;color:#aaa;">👁 {{post.views}} lượt xem</span>
   </div>
 </div>
 
-<!-- COMMENT 2 -->
-<div class="post-box fade-up">
-  <div class="post-hd"><span><span class="post-num">#2</span></span><span>23/04 — 09:30</span></div>
-  <div class="post-body">
-    <div class="post-user">
-      <div class="ava" style="background:var(--purple)">VH</div>
-      <div class="uname"><a href="/profile/VHPRO85">VHPRO85</a></div>
-      <div class="urank">Huyền Thoại</div>
-      <div class="ubadge" style="background:var(--red)">👑 HT</div>
-      <div class="ustats">Bài viết: 5,124<br>Điểm: 2,841</div>
+<!-- BÌNH LUẬN -->
+<div class="card fade-up">
+  <div class="card-head">💬 BÌNH LUẬN ({{comments.length}})</div>
+
+  {{#each comments}}
+  {{#unless parent_id}}
+  <div class="post-box" id="comment-{{id}}" style="margin:8px;border-radius:4px;">
+    <div class="post-hd">#{{@index}} — {{username}} — {{created_at}}</div>
+    <div class="post-body">
+      <div class="post-user">
+        {{#if avatar}}
+        <img src="{{avatar}}" class="ava" style="object-fit:cover;">
+        {{else}}
+        <div class="ava" style="width:40px;height:40px;font-size:14px;">{{username.[0]}}</div>
+        {{/if}}
+        <div class="uname"><a href="/profile/{{username}}">{{username}}</a></div>
+      </div>
+      <div class="post-content" style="padding:10px;">{{content}}</div>
     </div>
-    <div class="post-content">
-      <p>Mình test bộ này từ đầu tháng, cặp <strong>27-72</strong> đã về 3 lần trong 2 tuần! Anh em nên nuôi đuôi 7 thêm vài kỳ nữa.</p>
-      <p>Theo mình thêm cặp <span class="num-tag">47</span> — <span class="num-tag">74</span> vào nhé — đây là cầu bổ trợ cho bộ đuôi 7.</p>
+    <div class="post-acts">
+      <button class="act-btn" onclick="this.classList.toggle('liked')">👍 {{likes}}</button>
+      {{#if ../user}}
+      <button class="act-btn" onclick="showReply({{id}},'{{username}}')">💬 Trả lời</button>
+      {{/if}}
     </div>
+
+    <!-- Form reply -->
+    <div id="reply-{{id}}" class="reply-form-box">
+      <div style="font-size:12px;color:#888;margin-bottom:6px;">↩️ Trả lời <strong>@{{username}}</strong></div>
+      <form action="/post/{{../post.id}}/reply/{{id}}" method="POST">
+        <textarea name="content" rows="2" required
+          style="width:100%;padding:8px;border:1px solid #ddd;border-radius:4px;font-size:13px;resize:none;outline:none;font-family:inherit;"></textarea>
+        <div style="display:flex;gap:6px;margin-top:6px;">
+          <button type="submit" class="btn btn-red" style="font-size:12px;padding:5px 14px;">Gửi</button>
+          <button type="button" onclick="hideReply({{id}})" style="font-size:12px;padding:5px 12px;border:1px solid #ddd;border-radius:4px;background:#fff;cursor:pointer;">Hủy</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Replies lồng nhau -->
+    {{#each ../comments}}
+    {{#if parent_id}}
+    {{#if (eq parent_id ../id)}}
+    <div class="reply-box">
+      <div style="font-size:11px;color:#888;margin-bottom:4px;">↩️ <a href="/profile/{{username}}" style="color:var(--red);font-weight:700;">{{username}}</a> trả lời</div>
+      <div style="font-size:13px;color:#333;">{{content}}</div>
+    </div>
+    {{/if}}
+    {{/if}}
+    {{/each}}
   </div>
-  <div class="post-acts"><button class="act-btn" onclick="this.classList.toggle('liked')">👍 Thích 28</button></div>
+  {{/unless}}
+  {{/each}}
 </div>
 
-<!-- COMMENT 3 -->
-<div class="post-box fade-up">
-  <div class="post-hd"><span><span class="post-num">#3</span></span><span>23/04 — 11:14</span></div>
-  <div class="post-body">
-    <div class="post-user">
-      <div class="ava" style="background:var(--blue)">BE</div>
-      <div class="uname"><a href="/profile/BEOHP88">BEOHP88</a></div>
-      <div class="urank">Cao thủ</div>
-      <div class="ubadge">⭐ VIP</div>
-      <div class="ustats">Bài viết: 1,892<br>Điểm: 611</div>
-    </div>
-    <div class="post-content">
-      <p>Cảm ơn anh MAIDEN86! Mình đã thử dàn này ngày hôm qua, cặp <span class="num-tag">38</span> về đúng vào giải 7 luôn 😍</p>
-      <p>Hỏi xíu: Với <strong>miền Nam</strong> thì có áp dụng được không hay chỉ dành cho MB thôi ạ?</p>
-    </div>
-  </div>
-  <div class="post-acts"><button class="act-btn" onclick="this.classList.toggle('liked')">👍 Thích 15</button></div>
-</div>
-
-<!-- REPLY FORM -->
-<div class="reply-form fade-up">
-  <h3>✍️ Viết bình luận</h3>
-  <div class="alert alert-warn" style="margin-bottom:10px;">
-    💡 Vui lòng <a href="/login" style="color:var(--red);font-weight:700;">đăng nhập</a> để bình luận.
-    Chưa có tài khoản? <a href="/register" style="color:var(--red);font-weight:700;">Đăng ký miễn phí</a>
-  </div>
-  <textarea class="reply-ta" placeholder="Chia sẻ nhận định, kết quả hoặc đặt câu hỏi..."></textarea>
-  <div style="display:flex;justify-content:flex-end;margin-top:8px;">
-    <button class="btn btn-red" onclick="alert('Vui lòng đăng nhập!')">Gửi bình luận</button>
+<!-- FORM BÌNH LUẬN MỚI -->
+{{#if user}}
+<div class="card fade-up">
+  <div class="card-head">✍️ VIẾT BÌNH LUẬN</div>
+  <div style="padding:14px;">
+    <form action="/post/{{post.id}}/comment" method="POST">
+      <textarea name="content" rows="4" required placeholder="Chia sẻ nhận định, kết quả..."
+        style="width:100%;padding:10px;border:1px solid #ddd;border-radius:4px;font-size:13px;resize:vertical;outline:none;font-family:inherit;"></textarea>
+      <div style="margin-top:8px;text-align:right;">
+        <button type="submit" class="btn btn-red">💬 Gửi bình luận</button>
+      </div>
+    </form>
   </div>
 </div>
-
-<div class="pagi">
-  <a class="cur" href="#">1</a><a href="#">2</a><a href="#">3</a>
-  <span style="padding:4px 6px;color:#aaa">...</span>
-  <a href="#">84</a><a href="#">Sau »</a>
+{{else}}
+<div class="card" style="padding:16px;text-align:center;color:#888;">
+  <a href="/login" style="color:var(--red);font-weight:700;">Đăng nhập</a> để bình luận
 </div>
+{{/if}}
 
 <script>
-let liked = true, likeN = parseInt(document.getElementById('likeNum').textContent)||53;
-function toggleLike() {
-  liked = !liked; likeN += liked ? 1 : -1;
-  document.getElementById('likeNum').textContent = likeN;
-  document.getElementById('likeBtn').classList.toggle('liked', liked);
+function showReply(id, username) {
+  document.querySelectorAll('.reply-form-box').forEach(f => f.style.display='none');
+  const f = document.getElementById('reply-' + id);
+  if (f) { f.style.display='block'; f.querySelector('textarea').focus(); }
+}
+function hideReply(id) {
+  const f = document.getElementById('reply-' + id);
+  if (f) f.style.display='none';
+}
+async function likePost(btn, postId) {
+  const res = await fetch('/post/' + postId + '/like', { method: 'POST' });
+  const data = await res.json();
+  if (data.error) { alert('Vui lòng đăng nhập để like!'); return; }
+  document.getElementById('likeNum').textContent = data.likes;
+  btn.classList.add('liked');
 }
 </script>
