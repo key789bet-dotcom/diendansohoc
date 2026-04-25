@@ -2,6 +2,27 @@ const express = require('express');
 const router  = express.Router();
 const bcrypt  = require('bcryptjs');
 const db      = require('../db');
+const passport = require('passport');
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
+
+passport.use(new GoogleStrategy({
+  clientID: process.env.GOOGLE_CLIENT_ID,
+  clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+  callbackURL: 'https://diendansohoc.com/auth/google/callback'
+}, async (accessToken, refreshToken, profile, done) => {
+  try {
+    const email = profile.emails[0].value;
+    const username = 'gg_' + profile.id.slice(0,8);
+    const [users] = await db.query('SELECT * FROM users WHERE email=?', [email]);
+    if (users.length) return done(null, users[0]);
+    const [result] = await db.query(
+      'INSERT INTO users(username,email,password,ho_ten,region) VALUES(?,?,?,?,?)',
+      [username, email, 'google_oauth', profile.displayName, 'mb']
+    );
+    const [newUser] = await db.query('SELECT * FROM users WHERE id=?', [result.insertId]);
+    done(null, newUser[0]);
+  } catch(e) { done(e); }
+}));
 
 const kqxs = { dacBiet:'53728', nhat:'14793', dau:'2', duoi:'8' };
 
@@ -583,3 +604,12 @@ router.post('/upload-image', (req,res,next) => {
 });
 
 module.exports = router;
+
+// Google OAuth
+router.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'], session: false }));
+router.get('/auth/google/callback', passport.authenticate('google', { session: false, failureRedirect: '/login' }), 
+  async (req, res) => {
+    req.session.user = { id: req.user.id, username: req.user.username, user_rank: req.user.user_rank, avatar: req.user.avatar };
+    req.session.save(() => res.redirect('/home'));
+  }
+);
