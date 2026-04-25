@@ -88,7 +88,8 @@ req.session.loginSuccess = 'Đăng ký thành công! Chào mừng bạn!';
 
 router.get('/logout',(req,res)=>{req.session.destroy();res.redirect('/home');});
 router.get('/forum',async(req,res)=>{try{const [c]=await db.query('SELECT * FROM categories ORDER BY sort_order');res.render('forum',{title:'Diễn Đàn',kqxs:{ dacBiet:"--", nhat:"--", dau:"-", duoi:"-" },cats:c,user:req.session.user||null});}catch(e){res.render('forum',{title:'Diễn Đàn',kqxs:{ dacBiet:"--", nhat:"--", dau:"-", duoi:"-" },cats:[],user:null});}});
-router.get('/post/:id',async(req,res)=>{try{const [p]=await db.query('SELECT po.*,u.username as author,u.avatar,c.name as tagLabel FROM posts po JOIN users u ON po.user_id=u.id JOIN categories c ON po.category_id=c.id WHERE po.id=?',[req.params.id]);if(!p.length)return res.render('404',{title:'404'});await db.query('UPDATE posts SET views=views+1 WHERE id=?',[p[0].id]);const [cm]=await db.query('SELECT c.*,u.username,u.avatar FROM comments c JOIN users u ON c.user_id=u.id WHERE c.post_id=? ORDER BY c.created_at',[p[0].id]);res.render('post',{title:p[0].title,post:p[0],comments:cm,kqxs:{ dacBiet:"--", nhat:"--", dau:"-", duoi:"-" },user:req.session.user||null});}catch(e){console.error(e);res.redirect('/home');}});
+router.get('/post/:slug',async(req,res)=>{try{const [p]=await db.query('SELECT po.*,u.username as author,u.avatar,c.name as tagLabel FROM posts po JOIN users u ON po.user_id=u.id JOIN categories c ON po.category_id=c.id WHERE po.slug=? OR po.id=?',[req.params.slug, req.params.slug]);if(!p.length)return res.render('404',{title:'404'});await db.query('UPDATE posts SET views=views+1 WHERE id=?',[p[0].id]);const [cm]=await db.query('SELECT c.*,u.username,u.avatar FROM comments c JOIN users u ON c.user_id=u.id WHERE c.post_id=? ORDER BY c.created_at',[p[0].id]);const pageDesc = p[0].content.replace(/<[^>]+>/g,'').substring(0,160);
+    res.render('post',{title:p[0].title,post:p[0],comments:cm,kqxs:{ dacBiet:'--', nhat:'--', dau:'-', duoi:'-' },pageUrl:'/post/'+p[0].slug,pageDesc,user:req.session.user||null});}catch(e){console.error(e);res.redirect('/home');}});
 router.get('/post',(req,res)=>res.redirect('/forum'));
 router.get('/profile',auth,(req,res)=>res.redirect('/profile/'+req.session.user.username));
 router.get('/profile/:username',async(req,res)=>{try{const [u]=await db.query('SELECT * FROM users WHERE username=?',[req.params.username]);if(!u.length)return res.render('404',{title:'404'});const [b]=await db.query('SELECT * FROM posts WHERE user_id=? ORDER BY created_at DESC LIMIT 10',[u[0].id]);res.render('profile',{title:u[0].username,username:u[0].username,profile:u[0],baiViet:b,kqxs:{ dacBiet:"--", nhat:"--", dau:"-", duoi:"-" },user:req.session.user||null});}catch(e){console.error(e);res.redirect('/home');}});
@@ -169,8 +170,8 @@ router.post('/create-post', (req,res,next)=>{if(!req.session||!req.session.user)
 router.post('/post/:id/like', async (req,res) => {
   if (!req.session.user) return res.json({ error: 'Chưa đăng nhập' });
   try {
-    await db.query('UPDATE posts SET likes = likes + 1 WHERE id = ?', [req.params.id]);
-    const [[post]] = await db.query('SELECT likes FROM posts WHERE id = ?', [req.params.id]);
+    await db.query('UPDATE posts SET likes = likes + 1 WHERE id = ?', [req.params.slug, req.params.slug]);
+    const [[post]] = await db.query('SELECT likes FROM posts WHERE id = ?', [req.params.slug, req.params.slug]);
     res.json({ likes: post.likes });
   } catch(e) { res.json({ error: e.message }); }
 });
@@ -290,14 +291,14 @@ router.get('/admin', requireAdmin, async (req,res) => {
 
 router.post('/admin/user/:id/ban', requireAdmin, async (req,res) => {
   try {
-    await db.query('UPDATE users SET is_active = 0 WHERE id = ?', [req.params.id]);
+    await db.query('UPDATE users SET is_active = 0 WHERE id = ?', [req.params.slug, req.params.slug]);
     res.json({ success: true });
   } catch(e) { res.json({ error: e.message }); }
 });
 
 router.post('/admin/user/:id/unban', requireAdmin, async (req,res) => {
   try {
-    await db.query('UPDATE users SET is_active = 1 WHERE id = ?', [req.params.id]);
+    await db.query('UPDATE users SET is_active = 1 WHERE id = ?', [req.params.slug, req.params.slug]);
     res.json({ success: true });
   } catch(e) { res.json({ error: e.message }); }
 });
@@ -312,7 +313,7 @@ router.post('/admin/user/:id/rank', requireAdmin, async (req,res) => {
 
 router.post('/admin/post/:id/delete', requireAdmin, async (req,res) => {
   try {
-    await db.query('DELETE FROM posts WHERE id = ?', [req.params.id]);
+    await db.query('DELETE FROM posts WHERE id = ?', [req.params.slug, req.params.slug]);
     res.json({ success: true });
   } catch(e) { res.json({ error: e.message }); }
 });
@@ -436,21 +437,21 @@ router.post('/du-doan/:id/delete', async (req,res) => {
 // ── ADMIN: GHIM & DUYỆT BÀI ──────────────────────────────────────────────────
 router.post('/admin/post/:id/pin', requireAdmin, async (req,res) => {
   try {
-    await db.query('UPDATE posts SET is_pinned = NOT is_pinned WHERE id = ?', [req.params.id]);
+    await db.query('UPDATE posts SET is_pinned = NOT is_pinned WHERE id = ?', [req.params.slug, req.params.slug]);
     res.json({ success: true });
   } catch(e) { res.json({ error: e.message }); }
 });
 
 router.post('/admin/post/:id/approve', requireAdmin, async (req,res) => {
   try {
-    await db.query('UPDATE posts SET is_approved = 1 WHERE id = ?', [req.params.id]);
+    await db.query('UPDATE posts SET is_approved = 1 WHERE id = ?', [req.params.slug, req.params.slug]);
     res.json({ success: true });
   } catch(e) { res.json({ error: e.message }); }
 });
 
 router.post('/admin/post/:id/reject', requireAdmin, async (req,res) => {
   try {
-    await db.query('DELETE FROM posts WHERE id = ?', [req.params.id]);
+    await db.query('DELETE FROM posts WHERE id = ?', [req.params.slug, req.params.slug]);
     res.json({ success: true });
   } catch(e) { res.json({ error: e.message }); }
 });
