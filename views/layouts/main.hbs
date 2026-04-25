@@ -35,6 +35,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/public/css/global.css">
+<link rel="manifest" href="/public/manifest.json">
+<meta name="theme-color" content="#c0392b">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="DDSH">
+<link rel="apple-touch-icon" href="/public/img/icon-192.png">
 </head>
 <body>
 
@@ -62,5 +67,10 @@ if(document.getElementById("notifBadge")){
 }
 </script>
 <script src="/socket.io/socket.io.js"></script>
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js').catch(()=>{});
+}
+</script>
 </body>
 </html>

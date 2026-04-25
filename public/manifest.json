@@ -1,0 +1,14 @@
+{
+  "name": "Diễn Đàn Số Học",
+  "short_name": "DDSH",
+  "description": "Cộng đồng dự đoán xổ số, soi cầu lô đề uy tín số 1 Việt Nam",
+  "start_url": "/home",
+  "display": "standalone",
+  "background_color": "#c0392b",
+  "theme_color": "#c0392b",
+  "orientation": "portrait",
+  "icons": [
+    { "src": "/public/img/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/public/img/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
