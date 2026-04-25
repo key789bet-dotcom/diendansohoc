@@ -29,9 +29,9 @@ const sessionStore = new MySQLStore({
 app.use(session({
   secret: process.env.SESSION_SECRET || 'gmsh_secret_2026',
   resave: false,
-  saveUninitialized: false,
+  saveUninitialized: true,
   store: sessionStore,
-  cookie: { maxAge: 7 * 24 * 60 * 60 * 1000, httpOnly: true, sameSite: "lax", secure: true }
+  cookie: { maxAge: 7 * 24 * 60 * 60 * 1000, httpOnly: true, sameSite: "lax", secure: false }
 }));
 
 const { engine } = require('express-handlebars');
