@@ -58,7 +58,10 @@ router.post('/register', async (req,res)=>{
     if(ex.length){req.session.regError='Username hoặc email đã tồn tại!';return res.redirect('/register');}
     const hash=await bcrypt.hash(password,10);
     await db.query('INSERT INTO users(username,email,password,ho_ten,phone,region) VALUES(?,?,?,?,?,?)',[username,email,hash,((ho||'')+' '+(ten||'')).trim(),phone||null,region||'mb']);
-    req.session.loginSuccess='Đăng ký thành công! Mời đăng nhập.';
+    const [newUser2] = await db.query('SELECT * FROM users WHERE id=?', [result.insertId]);
+req.session.user = { id: newUser2[0].id, username: newUser2[0].username, user_rank: newUser2[0].user_rank, avatar: newUser2[0].avatar };
+req.session.loginSuccess = 'Đăng ký thành công! Chào mừng bạn!';
+res.redirect('/home');
     res.redirect('/login');
   } catch(e){console.error(e);req.session.regError='Lỗi: '+e.message;res.redirect('/register');}
 });
