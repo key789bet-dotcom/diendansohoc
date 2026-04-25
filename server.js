@@ -104,6 +104,7 @@ io.on('connection', (socket) => {
 });
 
 require('./kqxs-auto');
+require('./auto-chat');
 
 server.listen(PORT, () => {
   console.log(`✅ GMSH + Socket.io chạy tại: http://localhost:${PORT}`);
