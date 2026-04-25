@@ -62,7 +62,6 @@ router.post('/register', async (req,res)=>{
 req.session.user = { id: newUser2[0].id, username: newUser2[0].username, user_rank: newUser2[0].user_rank, avatar: newUser2[0].avatar };
 req.session.loginSuccess = 'Đăng ký thành công! Chào mừng bạn!';
 res.redirect('/home');
-    res.redirect('/login');
   } catch(e){console.error(e);req.session.regError='Lỗi: '+e.message;res.redirect('/register');}
 });
 
